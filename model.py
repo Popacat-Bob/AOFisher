@@ -1,11 +1,10 @@
 from pyautogui import click
 from time import sleep
-from pynput.mouse import Listener, Button
 from mss import mss
 import numpy as np
 
 
-class ColorCaptureModel:
+class colorCaptureModel:
 
     def __init__(self, topLeft: tuple[int, int], botRight: tuple[int, int], tolerance: int):
         self._topLeft = topLeft
@@ -51,23 +50,25 @@ class ColorCaptureModel:
 
         return np.any(masking)
 
-class fisherModel:
+class model:
 
     def __init__(self,
-                 capture: ColorCaptureModel,
+                 capture: colorCaptureModel,
                  color: tuple[int, int, int],
-                 delay: float = 0.5,
+                 clickDelay: float = 0.5,
+                 postFishDelay: float = 5,
                  clicks: int = 10,
                  ):
 
+        self._postFishDelay = postFishDelay
         self._color = color
         self._capturer = capture
-        self._delay = delay
+        self._clickDelay = clickDelay
         self._clicks = clicks
 
     @property
-    def delay(self):
-        return self._delay
+    def clickDelay(self):
+        return self._clickDelay
 
     @property
     def clicks(self):
@@ -76,21 +77,28 @@ class fisherModel:
     def setColor(self, color: tuple[int, int, int]):
         self._color = color
 
-    def setDelay(self, delay: float):
-        self._delay = delay
+    def setDelay(self, clickDelay: float):
+        self._clickDelay = clickDelay
 
     def setClicks(self, clicks: int):
         self._clicks = clicks
+
+    def setPostFishDelay(self, postFishDelay: float):
+        self._postFishDelay = postFishDelay
 
     def run(self):
 
         if self._capturer.capture(self._color):
             self._catch()
+            sleep(self._postFishDelay)
+            click()
 
     def _catch(self):
         for _ in range(self._clicks):
             click()
-            sleep(self._delay)
+            sleep(self._clickDelay)
+
+
 
 
 
