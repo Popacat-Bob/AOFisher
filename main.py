@@ -1,5 +1,4 @@
 from pyautogui import alert, click
-from
 from time import sleep
 
 class fisherModel:
@@ -22,10 +21,7 @@ class fisherModel:
         self._delay = delay
 
     def changeClicks(self, clicks: int):
-        self._clicks = clicks 
-
-    def setScreenCoords(self, clicks: int):
-        ...
+        self._clicks = clicks
         
     def catch(self, isPrompted: bool):
 
