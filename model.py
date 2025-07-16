@@ -4,38 +4,6 @@ from pynput.mouse import Listener, Button
 from mss import mss
 import numpy as np
 
-class fisherModel:
-
-    def __init__(self, delay: float = 0.5, clicks: int = 10):
-        self.screenTopLeft: int = -1
-        self.screenBotRight: int = -1
-        self._delay = delay
-        self._clicks = clicks
-
-    @property
-    def delay(self):
-        return self._delay
-
-    @property
-    def clicks(self):
-        return self._clicks
-
-    def changeDelay(self, delay: float):
-        self._delay = delay
-
-    def changeClicks(self, clicks: int):
-        self._clicks = clicks
-
-    def catch(self, isPrompted: bool):
-
-        if self.screenTopLeft < 0 and self.screenBotRight < 0:
-            raise ValueError("Screen Coordinates not set")
-
-        if isPrompted:
-
-            for _ in range(self._clicks):
-                click()
-                sleep(self._delay)
 
 class ColorCaptureModel:
 
@@ -43,6 +11,20 @@ class ColorCaptureModel:
         self._topLeft = topLeft
         self._botRight = botRight
         self._tolerance = tolerance
+
+        if topLeft[0] > botRight[0]:
+            raise ValueError("Initial x coordinate should be smaller than final x coordinate")
+
+        if topLeft[1] > botRight[1]:
+            raise ValueError("Initial y coordinate should be smaller than final y coordinate")
+
+    @property
+    def topLeft(self):
+        return self._topLeft
+
+    @property
+    def botRight(self):
+        return self._botRight
 
     def setTopLeft(self, topLeft: int):
         self._topLeft = topLeft
@@ -69,49 +51,47 @@ class ColorCaptureModel:
 
         return np.any(masking)
 
-# captures screen region coordinates for scanning
-class mouseScreenCaptureModel:
-    def capture(self):
+class fisherModel:
 
-        topLeft: tuple[int, int] = None
-        botRight: tuple[int, int] = None
+    def __init__(self,
+                 capture: ColorCaptureModel,
+                 color: tuple[int, int, int],
+                 delay: float = 0.5,
+                 clicks: int = 10,
+                 ):
 
-        def on_click(x, y, button, pressed):
-            nonlocal topLeft, botRight
+        self._color = color
+        self._capturer = capture
+        self._delay = delay
+        self._clicks = clicks
 
-            if pressed and button == Button.left:
-                topLeft = (x, y)
-            elif not pressed and button == Button.left:
-                botRight = (x, y)
-                return False
+    @property
+    def delay(self):
+        return self._delay
 
-        with Listener(on_click=on_click) as listener:
-            listener.join()
+    @property
+    def clicks(self):
+        return self._clicks
 
-        return topLeft, botRight
+    def setColor(self, color: tuple[int, int, int]):
+        self._color = color
 
+    def setDelay(self, delay: float):
+        self._delay = delay
 
-# gets the rgb value of the color in the mouse position
-class getColorAtMouseModel:
-    def capture(self):
-        color: tuple[int, int, int] | None = None
+    def setClicks(self, clicks: int):
+        self._clicks = clicks
 
-        def on_click(x, y, button, pressed):
-            nonlocal color
+    def run(self):
 
-            if pressed and button == Button.left:
-                with mss() as sct:
-                    region = {"top": y, "left": x, "width": 1, "height": 1}
-                    img = np.array(sct.grab(region), dtype=np.uint8)
-                    img = np.flip(img[:, :, :3], 2)
-                    color = tuple(int(i) for i in img[0, 0])
-                return False
+        if self._capturer.capture(self._color):
+            self._catch()
 
-        with Listener(on_click=on_click) as listener:
-            listener.join()
+    def _catch(self):
+        for _ in range(self._clicks):
+            click()
+            sleep(self._delay)
 
-        print(color)
-        return color
 
 
 
