@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QLineEdit
+from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QLineEdit, QHBoxLayout, QWidget
 from PyQt5.QtGui import QIcon, QFont, QGuiApplication
 from typing import Callable
 
@@ -15,6 +15,24 @@ class view(QMainWindow):
         self._sizeWidth = sizeWidth
         self._sizeHeight = sizeHeight
 
+    def rgbEditor(self, func: Callable):
+
+        cent_widg = QWidget()
+        self.setCentralWidget(cent_widg)
+
+        self.rgbLabel = QLabel("RGB", self)
+        self.R = QLineEdit("Enter R value", self)
+        self.G = QLineEdit("Enter G value", self)
+        self.B = QLineEdit("Enter B value", self)
+
+        rgbLayout = QHBoxLayout()
+
+        rgbLayout.addWidget(self.rgbLabel)
+        rgbLayout.addWidget(self.R)
+        rgbLayout.addWidget(self.G)
+        rgbLayout.addWidget(self.B)
+        cent_widg.setLayout(rgbLayout)
+
     def openCenter(self, width: int, height: int):
 
         x = (self._screenSize.width() - width)//2
@@ -24,12 +42,12 @@ class view(QMainWindow):
 
     def initRun(self, run: Callable):
         self._runButton = QPushButton("Run", self)
-        x = self.center_x(self._sizeWidth, 200)
+        x = self.center_x(self._sizeWidth, 800)
         self._runButton.setGeometry(
             x,
-            200,
-            200,
-            200
+            375,
+            800,
+            100
         )
 
         self._runButton.setCheckable(True)

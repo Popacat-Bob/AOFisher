@@ -13,6 +13,7 @@ class controller:
         app = QApplication(sys.argv)
         self.view = view(850, 500)
         self.initRun()
+        self.view.rgbEditor(self.gonnaRun)
         self.view.show()
         sys.exit(app.exec_())
 
