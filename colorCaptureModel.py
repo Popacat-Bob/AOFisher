@@ -1,5 +1,6 @@
 from mss import mss
 import numpy as np
+from pyautogui import position, screenshot
 
 class ColorCaptureModel:
 
