@@ -1,12 +1,9 @@
-import tkinter as tk
 from controller import controller
-from init import fishingModel
+from init import fishingModel, view
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.title("Fishing App")
-    root.geometry("200x100")
+def main():
+    control = controller(fishingModel, view)
+    control.run()
 
-    app = controller(root, fishingModel)
-
-    root.mainloop()
+if __name__ == '__main__':
+    main()
