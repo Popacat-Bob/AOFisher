@@ -1,4 +1,4 @@
-from model import model, colorCaptureModel
+from .model import model, colorCaptureModel
 
 colorCapture = colorCaptureModel((100, 100),
                                  ( 400, 400,),
