@@ -4,7 +4,7 @@ from pyautogui import position, screenshot
 
 class ColorCaptureModel:
 
-    def __init__(self, topLeft: int, botRight: int, tolerance: int):
+    def __init__(self, topLeft: tuple[int,int], botRight: tuple[int,int], tolerance: int):
         self._topLeft = topLeft
         self._botRight = botRight
         self._tolerance = tolerance
@@ -31,8 +31,6 @@ class ColorCaptureModel:
 
         diff = np.abs(img - np.array(targetRGB))
         masking = np.all(diff <= self._tolerance, axis = 2)
-
-        if (np.any(masking)):
-            print(True)
-            
+        
         return np.any(masking)
+

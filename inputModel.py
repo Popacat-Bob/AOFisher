@@ -45,5 +45,3 @@ class getColoratMouseModel:
         print(color)
         return color
     
-a = getColoratMouseModel()
-a.capture()
