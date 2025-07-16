@@ -46,6 +46,7 @@ class getColorAtMouseModel:
 
         print(color)
         return color
+    
 
 class switch:
     def __init__(self, func: Callable[[], None]):
@@ -54,7 +55,7 @@ class switch:
         self._thread = None
 
     def toggleRun(self, checked: bool):
-        self._toggle = checked
+        self._toggle = checked 
 
         if self._toggle and (self._thread is None or not self._thread.is_alive()):
             self._thread = Thread(target=self._runTask, daemon=True)

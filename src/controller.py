@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtWidgets import QApplication
 from .model import model
 from .view import view
-from utils import switch
+from .utils import switch 
 from typing import Callable
 
 class controller:
@@ -17,10 +17,10 @@ class controller:
         sys.exit(app.exec_())
 
     def initRun(self):
-        run = switch(self.gonnaRun)
-        self.view.initRun(run.toggleRun)
+        self._runApp = switch(self.model.run)
+        self.view.initRun(self._runApp.toggleRun)
 
     def gonnaRun(self):
-        print("Running")
+        print("running")
 
 
