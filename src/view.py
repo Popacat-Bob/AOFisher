@@ -7,7 +7,3 @@ class view(QMainWindow):
         self.setWindowTitle("AO Fisher")
         self.setGeometry(0, 0, 500, 500)
         self.setWindowIcon(QIcon('icons/fish.png'))
-
-        label = QLabel("The Ultimate Fisher", self)
-        label.setFont(QFont('Arial', 30))
-        label.setGeometry(0, 0, 500, 500)
