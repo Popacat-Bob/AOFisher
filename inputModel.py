@@ -1,7 +1,7 @@
 from pynput.mouse import Listener, Button
 import threading
 
-class mouseScreenModel:
+class mouseScreenCaptureModel:
     def capture(self):
 
         topLeft: tuple[int, int] = None
