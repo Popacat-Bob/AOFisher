@@ -1,8 +1,8 @@
 from controller import controller
-from init import fishingModel, view
+from init import fishingModel
 
 def main():
-    control = controller(fishingModel, view)
+    control = controller(fishingModel)
     control.run()
 
 if __name__ == '__main__':
