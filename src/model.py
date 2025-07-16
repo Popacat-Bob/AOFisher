@@ -102,10 +102,9 @@ class model:
 
 
     def _catch(self):
-        print(True)
-        """ for _ in range(self._clicks):
+        for _ in range(self._clicks):
             click()
-            sleep(self._clickDelay) """
+            sleep(self._clickDelay)
 
 
 
