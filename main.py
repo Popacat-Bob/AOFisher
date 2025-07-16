@@ -1,4 +1,5 @@
 from pyautogui import alert, click
+from
 from time import sleep
 
 class fisherModel:
