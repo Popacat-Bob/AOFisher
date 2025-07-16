@@ -25,7 +25,6 @@ class mouseScreenCaptureModel:
 
 class getColoratMouseModel:
     def capture(self):
-        x, y = position()
         color: tuple[int, int, int] | None = None
 
 
@@ -37,7 +36,7 @@ class getColoratMouseModel:
                     region = {"top": y, "left": x, "width": 1, "height": 1}
                     img = np.array(sct.grab(region), dtype=np.uint8)
                     img = np.flip(img[:, :, :3], 2)
-                    color = tuple(img[0, 0])
+                    color = tuple(int(i) for i in img[0, 0])
                 return False
 
         with Listener(on_click=on_click) as listener:
@@ -45,3 +44,6 @@ class getColoratMouseModel:
             
         print(color)
         return color
+    
+a = getColoratMouseModel()
+a.capture()
