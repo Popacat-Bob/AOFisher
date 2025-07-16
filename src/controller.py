@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication
-from model import model
-from view import view
+from .model import model
+from .view import view
 
 class controller:
     def __init__(self, model: model):
