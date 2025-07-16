@@ -8,8 +8,12 @@ class view(QMainWindow):
         super().__init__()
         self._screenSize = QGuiApplication.primaryScreen().size()
         self.setWindowTitle("AO Fisher")
+
         self.openCenter(sizeWidth, sizeHeight)
         self.setWindowIcon(QIcon('icons/fish.png'))
+
+        self._sizeWidth = sizeWidth
+        self._sizeHeight = sizeHeight
 
     def openCenter(self, width: int, height: int):
 
@@ -19,6 +23,18 @@ class view(QMainWindow):
 
     def initRun(self, run: Callable):
         self._runButton = QPushButton("Run", self)
-        self._runButton.setGeometry(150, 200, 200, 200)
+        self._runButton.setGeometry(
+            self.center_x(
+                self._sizeWidth,
+                200
+            ),
+                200,
+                200,
+                200
+        )
+        
         self._runButton.setCheckable(True)
         self._runButton.toggled.connect(run)
+
+    def center_x(self, parentWidth: int, width: int):
+        return (parentWidth - width) // 2
