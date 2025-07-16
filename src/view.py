@@ -17,7 +17,8 @@ class view(QMainWindow):
         y = (self._screenSize.height() - height)//2
         self.setGeometry(x, y, width, height)
 
-    def initRun(self, run: Callable[[], None]):
+    def initRun(self, run: Callable):
         self._runButton = QPushButton("Run", self)
         self._runButton.setGeometry(150, 200, 200, 200)
-        self._runButton.clicked.connect(run)
+        self._runButton.setCheckable(True)
+        self._runButton.toggled.connect(run)

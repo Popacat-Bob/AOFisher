@@ -1,7 +1,9 @@
+from typing import Callable
 import numpy as np
 from mss import mss
 from pynput.mouse import Button, Listener
-
+from threading import Thread
+from time import sleep
 # captures screen region coordinates for scanning
 class mouseScreenCaptureModel:
     def capture(self):
@@ -44,3 +46,19 @@ class getColorAtMouseModel:
 
         print(color)
         return color
+
+class switch:
+    def __init__(self, func: Callable[[], None]):
+        self._toggle = False
+        self._func = func
+
+    def toggleRun(self, checked: bool):
+        self._toggle = checked
+
+        if self._toggle:
+            Thread(target=self._runTask, daemon=True).start()
+
+    def _runTask(self):
+        while self._toggle:
+            self._func()
+            sleep(0.5)
