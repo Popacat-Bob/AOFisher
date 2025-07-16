@@ -55,11 +55,13 @@ class model:
     def __init__(self,
                  capture: colorCaptureModel,
                  color: tuple[int, int, int],
+                 scanDelay: float = 1,
                  clickDelay: float = 0.5,
                  postFishDelay: float = 5,
                  clicks: int = 10,
                  ):
 
+        self._scanDelay = scanDelay
         self._postFishDelay = postFishDelay
         self._color = color
         self._capturer = capture
@@ -88,10 +90,16 @@ class model:
 
     def run(self):
 
-        if self._capturer.capture(self._color):
-            self._catch()
-            sleep(self._postFishDelay)
-            click()
+        while True:
+
+            if self._capturer.capture(self._color):
+                self._catch()
+                sleep(self._postFishDelay)
+                click()
+                return
+
+            sleep(self._scanDelay)
+
 
     def _catch(self):
         for _ in range(self._clicks):
