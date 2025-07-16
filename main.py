@@ -1,5 +1,5 @@
 from src.controller import controller
-from src.init import *
+from init import *
 
 def main():
     control = controller(fishingModel)
