@@ -4,6 +4,7 @@ from mss import mss
 from pynput.mouse import Button, Listener
 from threading import Thread
 from time import sleep
+
 # captures screen region coordinates for scanning
 class mouseScreenCaptureModel:
     def capture(self):
@@ -44,10 +45,10 @@ class getColorAtMouseModel:
         with Listener(on_click=on_click) as listener:
             listener.join()
 
-        print(color)
         return color
     
 
+#multi-threading switch to run custom funcs based on PyQt5 checkable buttons
 class switch:
     def __init__(self, func: Callable[[], None]):
         self._toggle = False
