@@ -21,3 +21,6 @@ class mouseScreenCaptureModel:
 
         return topLeft, botRight
     
+a = mouseScreenCaptureModel()
+b,c = a.capture()
+print(b,c)
