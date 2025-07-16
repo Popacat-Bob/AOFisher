@@ -10,5 +10,9 @@ class controller:
     def run(self):
         app = QApplication(sys.argv)
         View = view(850, 500)
+        View.initRun(self.gonnaRun)
         View.show()
         sys.exit(app.exec_())
+
+    def gonnaRun(self):
+        print("Running")

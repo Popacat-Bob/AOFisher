@@ -1,5 +1,6 @@
-from PyQt5.QtWidgets import QMainWindow, QLabel
+from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton
 from PyQt5.QtGui import QIcon, QFont, QGuiApplication
+from typing import Callable
 
 class view(QMainWindow):
     def __init__(self, sizeWidth: int, sizeHeight: int):
@@ -15,3 +16,8 @@ class view(QMainWindow):
         x = (self._screenSize.width() - width)//2
         y = (self._screenSize.height() - height)//2
         self.setGeometry(x, y, width, height)
+
+    def initRun(self, run: Callable[[], None]):
+        self._runButton = QPushButton("Run", self)
+        self._runButton.setGeometry(150, 200, 200, 200)
+        self._runButton.clicked.connect(run)
