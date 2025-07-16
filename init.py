@@ -8,5 +8,3 @@ colorCapture = colorCaptureModel((100, 100),
 fishingModel = model(colorCapture,
                      (255, 255, 255),
                      )
-
-view = view()
