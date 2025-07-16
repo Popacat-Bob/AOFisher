@@ -1,8 +1,8 @@
 from pynput.mouse import Listener, Button
 from mss import mss
 import numpy as np
-from pyautogui import position
 
+#captures screen region coordinates for scanning
 class mouseScreenCaptureModel:
     def capture(self):
 
@@ -23,7 +23,8 @@ class mouseScreenCaptureModel:
 
         return topLeft, botRight
 
-class getColoratMouseModel:
+#gets the rgb value of the color in the mouse position
+class getColorAtMouseModel:
     def capture(self):
         color: tuple[int, int, int] | None = None
 
