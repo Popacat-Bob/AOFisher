@@ -19,7 +19,7 @@ class controller:
 
     def initRun(self):
         self._runApp = switch(self.model.run)
-        self.view.initRun(self._runApp.toggleRun)
+        self.view.RunButton(self._runApp.toggleRun)
 
     def gonnaRun(self):
         print("running")

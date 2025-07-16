@@ -15,32 +15,17 @@ class view(QMainWindow):
         self._sizeWidth = sizeWidth
         self._sizeHeight = sizeHeight
 
-    def rgbEditor(self, func: Callable):
-
-        cent_widg = QWidget()
-        self.setCentralWidget(cent_widg)
-
-        self.rgbLabel = QLabel("RGB", self)
-        self.R = QLineEdit("Enter R value", self)
-        self.G = QLineEdit("Enter G value", self)
-        self.B = QLineEdit("Enter B value", self)
-
-        rgbLayout = QHBoxLayout()
-
-        rgbLayout.addWidget(self.rgbLabel)
-        rgbLayout.addWidget(self.R)
-        rgbLayout.addWidget(self.G)
-        rgbLayout.addWidget(self.B)
-        cent_widg.setLayout(rgbLayout)
-
     def openCenter(self, width: int, height: int):
 
         x = (self._screenSize.width() - width)//2
         y = (self._screenSize.height() - height)//2
         self.setGeometry(x, y, width, height)
 
+    def RTextBox(self, func: Callable):
+        self._RTextBox = QLineEdit()
+        self._RTextBox.textEdited.connect(Callable)
 
-    def initRun(self, run: Callable):
+    def RunButton(self, run: Callable):
         self._runButton = QPushButton("Run", self)
         x = self.center_x(self._sizeWidth, 800)
         self._runButton.setGeometry(
