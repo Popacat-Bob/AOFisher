@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton
+from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QLineEdit
 from PyQt5.QtGui import QIcon, QFont, QGuiApplication
 from typing import Callable
 
@@ -21,6 +21,7 @@ class view(QMainWindow):
         y = (self._screenSize.height() - height)//2
         self.setGeometry(x, y, width, height)
 
+
     def initRun(self, run: Callable):
         self._runButton = QPushButton("Run", self)
         x = self.center_x(self._sizeWidth, 200)
@@ -30,7 +31,7 @@ class view(QMainWindow):
             200,
             200
         )
-        
+
         self._runButton.setCheckable(True)
         self._runButton.toggled.connect(run)
 
