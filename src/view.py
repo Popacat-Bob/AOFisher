@@ -23,14 +23,12 @@ class view(QMainWindow):
 
     def initRun(self, run: Callable):
         self._runButton = QPushButton("Run", self)
+        x = self.center_x(self._sizeWidth, 200)
         self._runButton.setGeometry(
-            self.center_x(
-                self._sizeWidth,
-                200
-            ),
-                200,
-                200,
-                200
+            x,
+            200,
+            200,
+            200
         )
         
         self._runButton.setCheckable(True)
@@ -38,3 +36,6 @@ class view(QMainWindow):
 
     def center_x(self, parentWidth: int, width: int):
         return (parentWidth - width) // 2
+    
+    def center_y(self, parentHeight: int, height: int):
+        return (parentHeight - height) // 2
