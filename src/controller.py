@@ -9,6 +9,6 @@ class controller:
 
     def run(self):
         app = QApplication(sys.argv)
-        View = view()
+        View = view(850, 500)
         View.show()
         sys.exit(app.exec_())
