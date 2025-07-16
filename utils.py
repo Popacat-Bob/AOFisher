@@ -51,12 +51,14 @@ class switch:
     def __init__(self, func: Callable[[], None]):
         self._toggle = False
         self._func = func
+        self._thread = None
 
     def toggleRun(self, checked: bool):
         self._toggle = checked
 
-        if self._toggle:
-            Thread(target=self._runTask, daemon=True).start()
+        if self._toggle and (self._thread is None or not self._thread.is_alive()):
+            self._thread = Thread(target=self._runTask, daemon=True)
+            self._thread.start()
 
     def _runTask(self):
         while self._toggle:
