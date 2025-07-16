@@ -1,5 +1,4 @@
 from pynput.mouse import Listener, Button
-import threading
 
 class mouseScreenCaptureModel:
     def capture(self):
