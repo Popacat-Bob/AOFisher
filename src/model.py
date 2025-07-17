@@ -2,6 +2,7 @@ from pyautogui import click
 from time import sleep
 from mss import mss
 import numpy as np
+import keyboard
 
 
 class colorCaptureModel:
@@ -118,6 +119,9 @@ class model:
             if self._capturer.capture(self._color):
                 print("Logged catch")
                 self._catch()
+                keyboard.press_and_release('0')
+                sleep(0.5)
+                keyboard.press_and_release('0')
                 sleep(self._postFishDelay)
                 click()
                 return
@@ -129,10 +133,6 @@ class model:
         for _ in range(self._clicks):
             click()
             sleep(self._clickDelay)
-
-
-
-
 
 
 

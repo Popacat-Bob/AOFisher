@@ -121,6 +121,7 @@ class view(QMainWindow):
 
         BotrightWidget = QWidget()
         BotrightWidget.setLayout(BotrightLayout)
+        BotrightWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         self._rightLayout.addWidget(BotrightWidget)
 
     def changeBottomTextDisplay(self, new: str):
@@ -146,6 +147,7 @@ class view(QMainWindow):
 
         TopleftWidget = QWidget()
         TopleftWidget.setLayout(TopleftLayout)
+        TopleftWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         self._rightLayout.addWidget(TopleftWidget)
 
     def changeTopTextDisplay(self, new: str):
