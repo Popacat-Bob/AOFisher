@@ -1,5 +1,6 @@
 import os
 from src.model import model, colorCaptureModel
+import json
 
 def init_config():
 
@@ -15,10 +16,30 @@ def init_config():
             raise SystemError(e)
 
 
-colorCapture = colorCaptureModel((100, 100),
-                                 ( 400, 400,),
-                                 10
-                                 )
-fishingModel = model(colorCapture,
-                     (255, 255, 255),
-                     )
+def init_models():
+
+    try:
+        with open('data/config.json', 'r') as f:
+            data = json.load(f)
+
+        captureSettings = data['ColorCaptureSettings']
+        CaptureModel = colorCaptureModel(
+            captureSettings['topLeft'],
+            captureSettings['bottomRight'],
+            captureSettings['tolerance']
+        )
+
+        fishModelSettings = data['FisherModelSettings']
+        fishingModel = model(
+            CaptureModel,
+            fishModelSettings['color'],
+            scanDelay= fishModelSettings['scan_delay'],
+            clickDelay= fishModelSettings['click_delay'],
+            postFishDelay= fishModelSettings['post_fish_delay'],
+            clicks= fishModelSettings['clicks']
+        )
+
+    except Exception as e:
+        raise SystemError(e)
+
+    return fishingModel

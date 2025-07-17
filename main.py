@@ -3,7 +3,8 @@ from init import *
 
 def main():
     init_config()
-    control = controller(fishingModel)
+    model = init_models()
+    control = controller(model)
     control.run()
 
 if __name__ == '__main__':

@@ -12,10 +12,10 @@ class colorCaptureModel:
         self._tolerance = tolerance
 
         if topLeft[0] > botRight[0]:
-            raise ValueError("Initial x coordinate should be smaller than final x coordinate")
+            print("Initial x coordinate should be smaller than final x coordinate")
 
         if topLeft[1] > botRight[1]:
-            raise ValueError("Initial y coordinate should be smaller than final y coordinate")
+            print("Initial y coordinate should be smaller than final y coordinate")
 
     @property
     def topLeft(self):
@@ -25,10 +25,14 @@ class colorCaptureModel:
     def botRight(self):
         return self._botRight
 
-    def setTopLeft(self, topLeft: int):
+    @property
+    def tolerance(self):
+        return self._tolerance
+    
+    def setTopLeft(self, topLeft: tuple[int, int]):
         self._topLeft = topLeft
 
-    def setBotRight(self, botRight: int):
+    def setBotRight(self, botRight: tuple[int, int]):
         self._botRight = botRight
 
     def setTolerance(self, tolerance: int):
@@ -75,11 +79,27 @@ class model:
     @property
     def clicks(self):
         return self._clicks
+    
+    @property
+    def color(self): 
+        return self._color
+    
+    @property 
+    def scanDelay(self):
+        return self._scanDelay
+    
+    @property
+    def postFishDelay(self):
+        return self._postFishDelay
+    
+    @property
+    def colorCapture(self):
+        return self._capturer
 
     def setColor(self, color: tuple[int, int, int]):
         self._color = color
 
-    def setDelay(self, clickDelay: float):
+    def setClickDelay(self, clickDelay: float):
         self._clickDelay = clickDelay
 
     def setClicks(self, clicks: int):
@@ -88,13 +108,16 @@ class model:
     def setPostFishDelay(self, postFishDelay: float):
         self._postFishDelay = postFishDelay
 
+    def setScanDelay(self, scanDelay: float):
+        self._scanDelay = scanDelay
+
     def run(self):
 
         while True:
 
             if self._capturer.capture(self._color):
-                self._catch()
                 print("Logged catch")
+                self._catch()
                 sleep(self._postFishDelay)
                 click()
                 return
