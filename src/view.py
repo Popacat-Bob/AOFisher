@@ -68,7 +68,7 @@ class view(QMainWindow):
         msg.setText(f'Inputted RGB Value: {text} is not a fucking RGB Value')
         msg.setIcon(QMessageBox.Critical)
         msg.setStandardButtons(QMessageBox.Ok)
-        result = msg.exec_()
+        msg.exec_()
 
     def openCenter(self, width: int, height: int):
         x = (self._screenSize.width() - width)//2
