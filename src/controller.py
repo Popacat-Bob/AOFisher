@@ -4,6 +4,7 @@ from .model import model
 from .view import view
 from .utils import switch 
 from typing import Callable
+import json
 
 class controller:
     def __init__(self, model: model):
@@ -13,13 +14,33 @@ class controller:
         app = QApplication(sys.argv)
         self.view = view(850, 500)
         self.initRun()
-        self.view.rgbEditor(self.gonnaRun)
+        self.view.RTextBox(self.changeRColor)
         self.view.show()
         sys.exit(app.exec_())
 
     def initRun(self):
         self._runApp = switch(self.model.run)
         self.view.RunButton(self._runApp.toggleRun)
+
+    def changeRColor(self, color: str):
+
+        try:
+            RCol = int(color)
+            with open('data/config.json', 'r') as f:
+                data = json.load(f)
+
+            data['FisherModelSettings']['color'][0] = RCol
+            with open('data/config.json', 'w') as f:
+                json.dump(data, f)
+
+            colorR = RCol
+            colorG = data['FisherModelSettings']['color'][1]
+            colorB = data['FisherModelSettings']['color'][2]
+
+            self.model.setColor((colorR, colorG, colorB))
+
+        except:
+            self.view.invalidColorPrompt(color)
 
     def gonnaRun(self):
         print("running")

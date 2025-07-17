@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QLineEdit, QHBoxLayout, QWidget
+from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QLineEdit, QHBoxLayout, QWidget, QMessageBox
 from PyQt5.QtGui import QIcon, QFont, QGuiApplication
 from typing import Callable
 
@@ -14,12 +14,6 @@ class view(QMainWindow):
 
         self._sizeWidth = sizeWidth
         self._sizeHeight = sizeHeight
-
-    def openCenter(self, width: int, height: int):
-
-        x = (self._screenSize.width() - width)//2
-        y = (self._screenSize.height() - height)//2
-        self.setGeometry(x, y, width, height)
 
     def RTextBox(self, func: Callable):
         self._RTextBox = QLineEdit()
@@ -37,6 +31,19 @@ class view(QMainWindow):
 
         self._runButton.setCheckable(True)
         self._runButton.toggled.connect(run)
+
+    def invalidColorPrompt(self, text: str):
+        msg = QMessageBox()
+        msg.setWindowTitle("Moron Alert")
+        msg.setText(f'Inputted RGB Value: {text} is not a fucking RGB Value')
+        msg.setIcon(QMessageBox.Critical)
+        msg.setStandardButtons(QMessageBox.Ok)
+        result = msg.exec_()
+
+    def openCenter(self, width: int, height: int):
+        x = (self._screenSize.width() - width)//2
+        y = (self._screenSize.height() - height)//2
+        self.setGeometry(x, y, width, height)
 
     def center_x(self, parentWidth: int, width: int):
         return (parentWidth - width) // 2
