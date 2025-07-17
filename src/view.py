@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QLineEdit, QHBoxLayout, QWidget, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QLineEdit, QHBoxLayout, QWidget, QMessageBox, QVBoxLayout
 from PyQt5.QtGui import QIcon, QFont, QGuiApplication
 from typing import Callable
 
@@ -14,10 +14,40 @@ class view(QMainWindow):
 
         self._sizeWidth = sizeWidth
         self._sizeHeight = sizeHeight
+        
+        self._leftLayOut = QVBoxLayout()
+        self._leftWidget = QWidget()
+        self._leftWidget.setLayout(self._leftLayOut)
 
-    def RTextBox(self, func: Callable):
-        self._RTextBox = QLineEdit()
-        self._RTextBox.textEdited.connect(Callable)
+        self._mainLayOut = QHBoxLayout()
+        self._mainLayOut.addWidget(self._leftWidget)
+
+        self._widget = QWidget()
+        self._widget.setLayout(self._mainLayOut)
+        self.setCentralWidget(self._widget)
+
+    def RGBSection(self, funcs: tuple[Callable]): 
+        
+        RGBLayout = QHBoxLayout()
+        RGBLabel = QLabel("RGB", self)
+
+        RTextBox = QLineEdit()
+        RTextBox.returnPressed.connect(lambda: funcs[0](RTextBox.text()))
+
+        GTextBox = QLineEdit()
+        GTextBox.returnPressed.connect(lambda: funcs[1](GTextBox.text()))
+
+        BTextBox = QLineEdit()
+        BTextBox.returnPressed.connect(lambda: funcs[2](BTextBox.text()))
+
+        RGBLayout.addWidget(RGBLabel)
+        RGBLayout.addWidget(RTextBox)
+        RGBLayout.addWidget(GTextBox)
+        RGBLayout.addWidget(BTextBox)
+
+        rgbWidget = QWidget()
+        rgbWidget.setLayout(RGBLayout)
+        self._leftLayOut.addWidget(rgbWidget)
 
     def RunButton(self, run: Callable):
         self._runButton = QPushButton("Run", self)
