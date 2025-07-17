@@ -1,5 +1,5 @@
 from pyautogui import click
-from time import sleep
+from time import sleep, time
 from mss import mss
 import numpy as np
 import keyboard
@@ -72,6 +72,7 @@ class model:
         self._capturer = capture
         self._clickDelay = clickDelay
         self._clicks = clicks
+        self._time = None
 
     @property
     def clickDelay(self):
@@ -113,6 +114,18 @@ class model:
         self._scanDelay = scanDelay
 
     def run(self):
+
+        if not self._time:
+            self._time = time()
+
+        if time() - self._time > 2400:
+            keyboard.press_and_release('9')
+            sleep(0.5)
+            click()
+            sleep(2)
+            keyboard.press_and_release('0')
+            click()
+            self._time = time()
 
         while True:
 
