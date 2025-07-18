@@ -125,6 +125,7 @@ class model:
             sleep(2)
             keyboard.press_and_release('0')
             click()
+            print("Logged eating")
             self._time = time()
 
         while True:
