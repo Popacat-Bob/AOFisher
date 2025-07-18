@@ -28,8 +28,11 @@ To select the color there are 2 ways
 
 #### 1.0.3 Additional Settings
 **Scan Delay**: Sets the delays between scanning for the color. Ideally kept under 2 seconds.
+
 **Click Delay**: Sets the delays per click when catching a fish, ideal is 25.
+
 **Fish Delay**: Sets the delay of how fast to fish after catching one already. Prevents undetected input due to rapid input messaging.
+
 **Clicks**: Sets the amount of clicks when catching a fish.
 
 ### When editing the textbox, make sure to press enter to save the input
