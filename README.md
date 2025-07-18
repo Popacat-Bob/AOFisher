@@ -35,10 +35,10 @@ To select the color there are 2 ways
 
 **Clicks**: Sets the amount of clicks when catching a fish.
 
-### When editing the textbox, make sure to press enter to save the input
-### Put the fishing rod at slot 0
+##### When editing the textbox, make sure to press enter to save the input
+##### Put the fishing rod at slot 0
 
 ### 1.1 Auto-Eating
 The character auto-eats once every 22 minutes, it is recommended to use food of hunger level 50+
 
-### Put the food at slot 0
+##### Put the food at slot 0
