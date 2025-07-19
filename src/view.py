@@ -40,7 +40,8 @@ class view(QMainWindow):
         self._widget = QWidget()
         self._widget.setLayout(self._mainLayout)
         self.setCentralWidget(self._widget)
-    
+
+
     def captureColorButton(self, func: Callable):
 
         CaptureColorButton = QPushButton("Capture Color")
@@ -201,8 +202,22 @@ class view(QMainWindow):
         ScanWidget.setLayout(ScanLayout)
         self._leftLayout.addWidget(ScanWidget)
         
+    def resetDurationSection(self, func: Callable, current: str):
 
-    def RGBSection(self, funcs: tuple[Callable], currents: tuple[str]): 
+        resetDurationLayout = QHBoxLayout()
+        resetDurationLabel = QLabel("Reset Delay")
+
+        resetDurationBox = QLineEdit(current)
+
+        resetDurationBox.returnPressed.connect(lambda: func(resetDurationBox.text()))
+
+        resetDurationWidget = QWidget()
+        resetDurationWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        resetDurationWidget.setLayout(resetDurationLayout)
+        self._leftLayout.addWidget(resetDurationWidget)
+
+
+    def RGBSection(self, funcs: tuple[Callable[[str], None], ...], currents: tuple[str, ...]):
         
         RGBLayout = QHBoxLayout()
         RGBLabel = QLabel("RGB", self)

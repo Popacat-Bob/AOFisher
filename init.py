@@ -36,7 +36,9 @@ def init_models():
             scanDelay= fishModelSettings['scan_delay'],
             clickDelay= fishModelSettings['click_delay'],
             postFishDelay= fishModelSettings['post_fish_delay'],
-            clicks= fishModelSettings['clicks']
+            clicks= fishModelSettings['clicks'],
+            timeEatInterval= fishModelSettings['time_eat_interval'],
+            resetDuration= fishModelSettings['reset_duration'],
         )
 
     except Exception as e:

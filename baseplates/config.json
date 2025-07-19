@@ -7,10 +7,12 @@
 
   "FisherModelSettings": {
     "color": [255, 255, 255],
-    "scan_delay": 1,
-    "click_delay": 0.5,
-    "post_fish_delay": 5,
-    "clicks": 10
+    "scan_delay": 0.75,
+    "click_delay": 0.25,
+    "post_fish_delay": 1,
+    "clicks": 25,
+    "time_eat_interval": 1200,
+    "reset_duration": 60
   },
 
   "App": {

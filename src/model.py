@@ -29,7 +29,8 @@ class colorCaptureModel:
     @property
     def tolerance(self):
         return self._tolerance
-    
+
+    #setter methods for each parameter
     def setTopLeft(self, topLeft: tuple[int, int]):
         self._topLeft = topLeft
 
@@ -39,6 +40,7 @@ class colorCaptureModel:
     def setTolerance(self, tolerance: int):
         self._tolerance = tolerance
 
+    #scans the screen for the target color based on the region selected
     def capture(self, targetRGB: tuple[int, int, int]):
         left, top = self._topLeft
         right, bottom = self._botRight
@@ -64,15 +66,23 @@ class model:
                  clickDelay: float = 0.5,
                  postFishDelay: float = 5,
                  clicks: int = 10,
+                 timeEatInterval: int = 1200,
+                 resetDuration: int = 60
                  ):
 
         self._scanDelay = scanDelay
         self._postFishDelay = postFishDelay
+
         self._color = color
         self._capturer = capture
         self._clickDelay = clickDelay
         self._clicks = clicks
-        self._time = None
+
+        self._timeEatStart = None
+        self._timeEatInterval = timeEatInterval
+
+        self._timeFishStart = None
+        self._resetDuration = resetDuration
 
     @property
     def clickDelay(self):
@@ -98,6 +108,9 @@ class model:
     def colorCapture(self):
         return self._capturer
 
+    def setResetDuration(self, resetDuration: int):
+        self._timeEatStart = resetDuration
+
     def setColor(self, color: tuple[int, int, int]):
         self._color = color
 
@@ -113,12 +126,13 @@ class model:
     def setScanDelay(self, scanDelay: float):
         self._scanDelay = scanDelay
 
+    #runs the process for fishing, and checks
     def run(self):
 
-        if not self._time:
-            self._time = time()
+        if not self._timeEatStart:
+            self._timeEatStart = time()
 
-        if time() - self._time > 2400:
+        if time() - self._timeEatStart > self._timeEatInterval:
             keyboard.press_and_release('9')
             sleep(0.5)
             click()
@@ -126,9 +140,21 @@ class model:
             keyboard.press_and_release('0')
             click()
             print("Logged eating")
-            self._time = time()
+            self._timeEatStart = time()
 
         while True:
+
+            if not self._timeFishStart:
+                self._timeFishStart = time()
+
+            if time() -  self._timeEatStart >= self._resetDuration:
+                print('Resetting sequence')
+                keyboard.press_and_release('9')
+                sleep(0.5)
+                keyboard.press_and_release('0')
+                sleep(0.5)
+                click()
+                self._timeFishStart = None
 
             if self._capturer.capture(self._color):
                 print("Logged catch")
@@ -142,7 +168,7 @@ class model:
 
             sleep(self._scanDelay)
 
-
+    #catches fish based on clicks and click interval parameters
     def _catch(self):
         for _ in range(self._clicks):
             click()
