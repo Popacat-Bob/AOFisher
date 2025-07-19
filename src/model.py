@@ -120,7 +120,7 @@ class model:
         self._timeEatInterval = timeEatInterval
 
     def setResetDuration(self, resetDuration: int):
-        self._timeEatStart = resetDuration
+        self._resetDuration = resetDuration
 
     def setColor(self, color: tuple[int, int, int]):
         self._color = color
@@ -158,14 +158,17 @@ class model:
             if not self._timeFishStart:
                 self._timeFishStart = time()
 
-            if time() -  self._timeEatStart >= self._resetDuration:
+            if time() -  self._timeFishStart >= self._resetDuration:
                 print('Resetting sequence')
+                click()
+                sleep(0.5)
                 keyboard.press_and_release('9')
                 sleep(0.5)
                 keyboard.press_and_release('0')
                 sleep(0.5)
                 click()
                 self._timeFishStart = None
+                return
 
             if self._capturer.capture(self._color):
                 print("Logged catch")

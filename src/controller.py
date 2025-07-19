@@ -59,7 +59,7 @@ class controller:
 
         self.view.timeEatIntervalSection(self.setTimeEatInterval, str(self.model.timeEatInterval))
 
-        self.view.resetDurationSection(self.setresetDuration, str(self.model.resetDuration))
+        self.view.resetDurationSection(self.setResetDuration, str(self.model.resetDuration))
 
         self.view.captureColorButton(
             self.setRGB
@@ -84,41 +84,43 @@ class controller:
 
         self.view.RunButton(toggle)
     
-    def setTimeEatInterval(self, TimeEatInterval: int):
+    def setTimeEatInterval(self, TimeEatInterval: str):
 
         try:
-
+            
+            TimeEatInterval = int(TimeEatInterval)
             with open('data/config.json', 'r') as f:
                 data = json.load(f)
 
             data['FisherModelSettings']['time_eat_interval'] = TimeEatInterval
 
             with open('data/config.json', 'w') as f:
-                json.dump(data, f)
+                json.dump(data, f, indent = 4)
 
-            self.model.setTimeEatInterval = TimeEatInterval
+            self.model.setTimeEatInterval(TimeEatInterval)
 
         #ADD AN ACTUAL HANDLER TO THIS
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
-    def setresetDuration(self, resetDuration: int):
+    def setResetDuration(self, resetDuration: str):
 
         try:
-
+            resetDuration = int(resetDuration)
+            
             with open('data/config.json', 'r') as f:
                 data = json.load(f)
 
             data['FisherModelSettings']['reset_duration'] = resetDuration
 
             with open('data/config.json', 'w') as f:
-                json.dump(data, f)
+                json.dump(data, f, indent = 4)
 
-            self.model.setResetDuration = resetDuration
+            self.model.setResetDuration(resetDuration)
 
         #ADD AN ACTUAL HANDLER TO THIS
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
     def setRGB(self):
 
@@ -170,6 +172,7 @@ class controller:
     def changeTolerance(self, tolerance: str):
         
         try:
+
             tolerance = int(tolerance)
             with open('data/config.json', 'r') as f:
                 data = json.load(f)
@@ -183,6 +186,7 @@ class controller:
 
         except Exception as e:
             self.view.invalidIntPrompt(tolerance)
+            print(e)
 
     def changeBottom(self, y: str):
 
