@@ -105,7 +105,7 @@ class view(QMainWindow):
         ClicksWidget.setLayout(ClicksLayout)
         self._leftLayout.addWidget(ClicksWidget)
 
-    def BotRightConfig(self, funcs: tuple[Callable], currents: tuple[str]): 
+    def BotRightConfig(self, funcs: tuple[Callable[[str], None], ...], currents: tuple[str, ...]):
 
         BotrightLayout = QHBoxLayout()
 
@@ -131,7 +131,7 @@ class view(QMainWindow):
     def changeRightTextDisplay(self, new: str):
         self._RightTextBox.setText(new)
 
-    def TopLeftConfig(self, funcs: tuple[Callable], currents: tuple[str]): 
+    def TopLeftConfig(self, funcs: tuple[Callable[[str], None], ...], currents: tuple[str, ...]):
 
         TopleftLayout = QHBoxLayout()
 
