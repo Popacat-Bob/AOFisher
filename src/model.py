@@ -178,6 +178,7 @@ class model:
                 keyboard.press_and_release('0')
                 sleep(self._postFishDelay)
                 click()
+                self._timeFishStart = None
                 return
 
             sleep(self._scanDelay)
