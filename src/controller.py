@@ -54,11 +54,17 @@ class controller:
             str(self.model.colorCapture.tolerance)
         )
 
+
+        self.view.SelectRegionButton(self.getRegion)
+
+        self.view.timeEatIntervalSection(self.setTimeEatInterval, str(self.model.timeEatInterval))
+
+        self.view.resetDurationSection(self.setresetDuration, str(self.model.resetDuration))
+
         self.view.captureColorButton(
             self.setRGB
         )
 
-        self.view.SelectRegionButton(self.getRegion)
         self.initRun()
 
         self.view.setWindowFlag(Qt.WindowStaysOnTopHint)
@@ -77,6 +83,24 @@ class controller:
 
 
         self.view.RunButton(toggle)
+    
+    def setTimeEatInterval(self, TimeEatInterval: int):
+
+        try:
+
+            with open('data/config.json', 'r') as f:
+                data = json.load(f)
+
+            data['FisherModelSettings']['time_eat_interval'] = TimeEatInterval
+
+            with open('data/config.json', 'w') as f:
+                json.dump(data, f)
+
+            self.model.setTimeEatInterval = TimeEatInterval
+
+        #ADD AN ACTUAL HANDLER TO THIS
+        except:
+            pass
 
     def setresetDuration(self, resetDuration: int):
 

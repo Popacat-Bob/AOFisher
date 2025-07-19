@@ -84,6 +84,14 @@ class model:
         self._timeFishStart = None
         self._resetDuration = resetDuration
 
+    @property 
+    def timeEatInterval(self):
+        return self._timeEatInterval
+    
+    @property
+    def resetDuration(self):
+        return self._resetDuration 
+    
     @property
     def clickDelay(self):
         return self._clickDelay
@@ -107,6 +115,9 @@ class model:
     @property
     def colorCapture(self):
         return self._capturer
+
+    def setTimeEatInterval(self, timeEatInterval: int):
+        self._timeEatInterval = timeEatInterval
 
     def setResetDuration(self, resetDuration: int):
         self._timeEatStart = resetDuration

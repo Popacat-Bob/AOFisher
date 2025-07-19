@@ -41,6 +41,21 @@ class view(QMainWindow):
         self._widget.setLayout(self._mainLayout)
         self.setCentralWidget(self._widget)
 
+    def timeEatIntervalSection(self, func: Callable[[str], None], current: str):
+
+        timeEatIntervalLayout = QHBoxLayout()
+        timeEatIntervalLabel = QLabel("Eat Intervals\nPlace food at slot 9")
+        timeEatIntervalLine = QLineEdit(current)
+
+        timeEatIntervalLine.returnPressed.connect(lambda: func(timeEatIntervalLine.text()))
+
+        timeEatIntervalLayout.addWidget(timeEatIntervalLabel)
+        timeEatIntervalLayout.addWidget(timeEatIntervalLine)
+
+        timeEatIntervalWidget = QWidget()
+        timeEatIntervalWidget.setLayout(timeEatIntervalLayout)
+        timeEatIntervalWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        self._rightLayout.addWidget(timeEatIntervalWidget)
 
     def captureColorButton(self, func: Callable):
 
@@ -205,9 +220,12 @@ class view(QMainWindow):
     def resetDurationSection(self, func: Callable, current: str):
 
         resetDurationLayout = QHBoxLayout()
-        resetDurationLabel = QLabel("Reset Delay")
 
+        resetDurationLabel = QLabel("Reset Delay")
         resetDurationBox = QLineEdit(current)
+
+        resetDurationLayout.addWidget(resetDurationLabel)
+        resetDurationLayout.addWidget(resetDurationBox)
 
         resetDurationBox.returnPressed.connect(lambda: func(resetDurationBox.text()))
 
