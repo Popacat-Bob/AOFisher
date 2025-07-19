@@ -1,1 +1,0 @@
-{"ColorCaptureSettings": {"topLeft": [250, 250], "bottomRight": [500, 500], "tolerance": 10}, "FisherModelSettings": {"color": [255, 255, 255], "scan_delay": 0.75, "click_delay": 0.25, "post_fish_delay": 1, "clicks": 25, "time_eat_interval": "1100", "reset_duration": "90"}, "App": {"width": 850, "height": 500}}
