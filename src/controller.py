@@ -78,6 +78,24 @@ class controller:
 
         self.view.RunButton(toggle)
 
+    def setresetDuration(self, resetDuration: int):
+
+        try:
+
+            with open('data/config.json', 'r') as f:
+                data = json.load(f)
+
+            data['FisherModelSettings']['reset_duration'] = resetDuration
+
+            with open('data/config.json', 'w') as f:
+                json.dump(data, f)
+
+            self.model.setResetDuration = resetDuration
+
+        #ADD AN ACTUAL HANDLER TO THIS
+        except:
+            pass
+
     def setRGB(self):
 
         try:
