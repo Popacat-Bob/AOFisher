@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QLineEdit, QHBoxLayout, QWidget, QMessageBox, QVBoxLayout, QSizePolicy
 from PyQt5.QtGui import QIcon, QFont, QGuiApplication
 from typing import Callable
+from pynput import keyboard
 
 class view(QMainWindow):
     def __init__(self, sizeWidth: int, sizeHeight: int):
@@ -41,6 +42,7 @@ class view(QMainWindow):
         self._widget.setLayout(self._mainLayout)
         self.setCentralWidget(self._widget)
 
+
     def timeEatIntervalSection(self, func: Callable[[str], None], current: str):
 
         timeEatIntervalLayout = QHBoxLayout()
@@ -64,17 +66,29 @@ class view(QMainWindow):
 
         self._leftLayout.addWidget(CaptureColorButton)
 
+    def keyRunTrigger(self):
+
+        def on_press(key):
+            try:
+                if key.char.lower() == 'p':
+                    self._RunButton.toggle()
+            except:
+                pass
+
+        self.listener = keyboard.Listener(on_press=on_press)
+        self.listener.start()
+
     def onRunButton(self):
-        self._RunButton.setText("Stop Fishing")
+        self._RunButton.setText("Stop Fishing (P)")
         self._RunButton.setStyleSheet("background-color: green")
 
     def offRunButton(self):
-        self._RunButton.setText("Start Fishing")
+        self._RunButton.setText("Start Fishing (P)")
         self._RunButton.setStyleSheet("background-color: gray")
 
     def RunButton(self, func: Callable):
         
-        self._RunButton = QPushButton("Start Fishing")
+        self._RunButton = QPushButton("Start Fishing (P)")
         self._RunButton.setCheckable(True)
 
         self._RunButton.toggled.connect(func)

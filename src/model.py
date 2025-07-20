@@ -84,6 +84,8 @@ class model:
         self._timeFishStart = None
         self._resetDuration = resetDuration
 
+        self._running = False
+
     @property 
     def timeEatInterval(self):
         return self._timeEatInterval
@@ -137,6 +139,14 @@ class model:
     def setScanDelay(self, scanDelay: float):
         self._scanDelay = scanDelay
 
+    def setRunning(self, running: bool):
+        self._running = running
+
+        if self._running:
+            print("Running")
+        else:
+            print("Stopped")
+
     #runs the process for fishing, and checks
     def run(self):
 
@@ -153,7 +163,7 @@ class model:
             print("Logged eating")
             self._timeEatStart = time()
 
-        while True:
+        while self._running:
 
             if not self._timeFishStart:
                 self._timeFishStart = time()
@@ -173,6 +183,10 @@ class model:
             if self._capturer.capture(self._color):
                 print("Logged catch")
                 self._catch()
+
+                if not self._running:
+                    return
+
                 keyboard.press_and_release('0')
                 sleep(0.5)
                 keyboard.press_and_release('0')
@@ -186,8 +200,11 @@ class model:
     #catches fish based on clicks and click interval parameters
     def _catch(self):
         for _ in range(self._clicks):
+
+            if not self._running:
+                break
+
             click()
             sleep(self._clickDelay)
-
 
 

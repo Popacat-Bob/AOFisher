@@ -4,21 +4,45 @@ from mss import mss
 from pynput.mouse import Button, Listener
 from threading import Thread
 from time import sleep
+from PyQt5.QtWidgets import QApplication, QLabel
+from PyQt5.QtGui import QPixmap, QGuiApplication, QPaintEvent
+from PyQt5.QtCore import Qt
 
 # captures screen region coordinates for scanning
 class mouseScreenCaptureModel:
     def capture(self):
 
-        topLeft: tuple[int, int] = None
-        botRight: tuple[int, int] = None
+        topLeft: tuple[int, int] | None = None
+        botRight: tuple[int, int] | None = None
+
+        class DrawableWindow(QLabel):
+
+            def __init__(self):
+                super().__init__()
+
+                screen = QGuiApplication.primaryScreen()
+                screenshot = screen.grabWindow(0)
+
+                self.setPixmap(screenshot)
+                self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool)
+                self.setGeometry(QGuiApplication.primaryScreen().geometry())
+                self.showFullScreen()
+
+        ss: None | DrawableWindow = None
 
         def on_click(x, y, button, pressed):
             nonlocal topLeft, botRight
+            nonlocal ss
 
             if pressed and button == Button.left:
                 topLeft = (x, y)
+                ss = DrawableWindow()
+
             elif not pressed and button == Button.left:
                 botRight = (x, y)
+                if ss:
+                    ss.close()
+
                 return False
 
         with Listener(on_click=on_click) as listener:

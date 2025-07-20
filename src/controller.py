@@ -65,8 +65,11 @@ class controller:
             self.setRGB
         )
 
-        self.initRun()
 
+        self.initRun()
+        self.view.keyRunTrigger()
+
+        self.view.installEventFilter(self.view)
         self.view.setWindowFlag(Qt.WindowStaysOnTopHint)
         self.view.show()
         sys.exit(app.exec_())
@@ -75,8 +78,8 @@ class controller:
         self._runApp = switch(self.model.run)
 
         def toggle(checked: bool):
-
             self._runApp.toggleRun(checked)
+            self.model.setRunning(checked)
 
             if checked: self.view.onRunButton()
             else: self.view.offRunButton()
