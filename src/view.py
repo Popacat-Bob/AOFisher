@@ -70,7 +70,7 @@ class view(QMainWindow):
 
         def on_press(key):
             try:
-                if key.char.lower() == 'p':
+                if key.char.lower() == 'y':
                     self._RunButton.toggle()
             except:
                 pass
