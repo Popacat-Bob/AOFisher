@@ -79,16 +79,16 @@ class view(QMainWindow):
         self.listener.start()
 
     def onRunButton(self):
-        self._RunButton.setText("Stop Fishing (P)")
+        self._RunButton.setText("Stop Fishing (Y)")
         self._RunButton.setStyleSheet("background-color: green")
 
     def offRunButton(self):
-        self._RunButton.setText("Start Fishing (P)")
+        self._RunButton.setText("Start Fishing (Y)")
         self._RunButton.setStyleSheet("background-color: gray")
 
     def RunButton(self, func: Callable):
         
-        self._RunButton = QPushButton("Start Fishing (P)")
+        self._RunButton = QPushButton("Start Fishing (Y)")
         self._RunButton.setCheckable(True)
 
         self._RunButton.toggled.connect(func)
