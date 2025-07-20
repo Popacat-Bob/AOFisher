@@ -6,7 +6,7 @@ from threading import Thread
 from time import sleep
 from PyQt5.QtWidgets import QApplication, QLabel
 from PyQt5.QtGui import QPixmap, QGuiApplication, QPaintEvent
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer
 
 # captures screen region coordinates for scanning
 class mouseScreenCaptureModel:
@@ -14,6 +14,8 @@ class mouseScreenCaptureModel:
 
         topLeft: tuple[int, int] | None = None
         botRight: tuple[int, int] | None = None
+
+        app = QApplication.instance()
 
         class DrawableWindow(QLabel):
 
@@ -30,23 +32,39 @@ class mouseScreenCaptureModel:
 
         ss: None | DrawableWindow = None
 
+        def show():
+            nonlocal ss
+            ss = DrawableWindow()
+
+        def close():
+            nonlocal ss
+            if ss:
+                ss.close()
+
+            app.quit()
+
         def on_click(x, y, button, pressed):
             nonlocal topLeft, botRight
             nonlocal ss
 
             if pressed and button == Button.left:
                 topLeft = (x, y)
-                ss = DrawableWindow()
+                QTimer.singleShot(0, show)
 
             elif not pressed and button == Button.left:
                 botRight = (x, y)
                 if ss:
-                    ss.close()
+                    QTimer.singleShot(0, close)
 
                 return False
 
-        with Listener(on_click=on_click) as listener:
-            listener.join()
+        listener = Listener(on_click=on_click)
+        listener.start()
+
+        QTimer.singleShot(0, lambda: None)
+        app.exec_()
+
+        listener.join()
 
         return topLeft, botRight
 
