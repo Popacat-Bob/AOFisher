@@ -67,6 +67,7 @@ class model:
                  postFishDelay: float = 5,
                  clicks: int = 10,
                  timeEatInterval: int = 1200,
+                 brewEatInterval: int = 360,
                  resetDuration: int = 60
                  ):
 
@@ -83,6 +84,10 @@ class model:
 
         self._timeFishStart = None
         self._resetDuration = resetDuration
+
+        self._brewEatInterval = brewEatInterval
+        self._brewEatStart = None
+        self._brewEat = False
 
         self._running = False
 
@@ -147,21 +152,41 @@ class model:
         else:
             print("Stopped")
 
+    def _eatAction(self):
+        keyboard.press_and_release('9')
+        sleep(0.5)
+        click()
+        sleep(2)
+        keyboard.press_and_release('0')
+        click()
+        print("Logged eating")
+        self._timeEatStart = time()
+
+    def _fishResetAction(self):
+        print('Resetting sequence')
+        click()
+        sleep(0.5)
+        keyboard.press_and_release('9')
+        sleep(0.5)
+        keyboard.press_and_release('0')
+        sleep(0.5)
+        click()
+        self._timeFishStart = None
+
+    def _brewEatAction(self):
+        ...
+
     #runs the process for fishing, and checks
     def run(self):
 
         if not self._timeEatStart:
             self._timeEatStart = time()
 
-        if time() - self._timeEatStart > self._timeEatInterval:
-            keyboard.press_and_release('9')
-            sleep(0.5)
-            click()
-            sleep(2)
-            keyboard.press_and_release('0')
-            click()
-            print("Logged eating")
-            self._timeEatStart = time()
+        if time() - self._timeEatStart >= self._timeEatInterval:
+            self._eatAction()
+
+        if self._brewEat:
+            ...
 
         while self._running:
 
@@ -169,15 +194,7 @@ class model:
                 self._timeFishStart = time()
 
             if time() -  self._timeFishStart >= self._resetDuration:
-                print('Resetting sequence')
-                click()
-                sleep(0.5)
-                keyboard.press_and_release('9')
-                sleep(0.5)
-                keyboard.press_and_release('0')
-                sleep(0.5)
-                click()
-                self._timeFishStart = None
+                self._fishResetAction()
                 return
 
             if self._capturer.capture(self._color):
