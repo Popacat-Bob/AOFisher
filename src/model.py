@@ -124,6 +124,10 @@ class model:
     def colorCapture(self):
         return self._capturer
 
+    @property
+    def brewEatInterval(self):
+        return self._brewEatInterval
+
     def setTimeEatInterval(self, timeEatInterval: int):
         self._timeEatInterval = timeEatInterval
 
@@ -156,8 +160,8 @@ class model:
     def setBrewEatInterval(self, brewEatInterval: int):
         self._brewEatInterval = brewEatInterval
 
-    def flipBrewEat(self):
-        self._brewEat = not self._brewEat
+    def setBrewEat(self, checked: bool):
+        self._brewEat = checked
 
     def _isGreaterthanDuration(self, start, duration):
         return True if time() - start >= duration else False

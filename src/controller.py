@@ -65,7 +65,7 @@ class controller:
             self.setRGB
         )
 
-
+        self.view.brewSection(self.toggleBrew, self.setBrewEatInterval, str(self.model.brewEatInterval))
         self.initRun()
         self.view.keyRunTrigger()
 
@@ -86,11 +86,37 @@ class controller:
 
 
         self.view.RunButton(toggle)
+
+
+    def toggleBrew(self, checked: bool):
+        self.model.setBrewEat(checked)
+
+        if checked: self.view.onBrewButton()
+        else: self.view.offBrewButton()
+
+    def setBrewEatInterval(self, brewEatInterval: str):
+        try:
+
+            brewEatInterval = int(brewEatInterval)
+            with open('data/config.json', 'r') as f:
+                data = json.load(f)
+
+            data['FisherModelSettings']['brew_eat_interval'] = brewEatInterval
+
+            with open('data/config.json', 'w') as f:
+                json.dump(data, f, indent=4)
+
+            self.model.setBrewEatInterval(brewEatInterval)
+
+        # ADD AN ACTUAL HANDLER TO THIS
+        except Exception as e:
+            print(e)
+
     
     def setTimeEatInterval(self, TimeEatInterval: str):
 
         try:
-            
+
             TimeEatInterval = int(TimeEatInterval)
             with open('data/config.json', 'r') as f:
                 data = json.load(f)
