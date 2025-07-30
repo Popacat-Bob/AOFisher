@@ -14,10 +14,34 @@ class controller:
     def run(self):
         app = QApplication(sys.argv)
         self.view = view(850, 500)
-        self.view.RGBSection((self.changeRColor, 
-                              self.changeGColor, 
+        self.view.RGBSection((self.changeRColor,
+                              self.changeGColor,
                               self.changeBColor
                               ), tuple(map(str, self.model.color)))
+
+        self.view.ToleranceSetting(
+            self.changeTolerance,
+            str(self.model.colorCapture.tolerance)
+        )
+
+        self.view.captureColorButton(
+            self.setRGB
+        )
+
+        self.view.RGBSectionNotify((
+            self.changeRColorNotify,
+            self.changeGColorNotify,
+            self.changeBColorNotify
+        ), tuple(map(str, self.model.colorNotify)))
+
+        self.view.ToleranceSettingNotify(
+            self.changeToleranceNotify,
+            str(self.model.colorCaptureNotify.tolerance)
+        )
+
+        self.view.captureColorButtonNotify(
+            self.setRGBNotify
+        )
         
         self.view.ScanConfigSection(
             self.changeScanDelay,
@@ -49,21 +73,19 @@ class controller:
             tuple(map(str, self.model.colorCapture.botRight))
         )
 
-        self.view.ToleranceSetting(
-            self.changeTolerance,
-            str(self.model.colorCapture.tolerance)
-        )
 
+        self.view.SelectRegionButtonPrompt(self.getRegion)
 
-        self.view.SelectRegionButton(self.getRegion)
+        self.view.TopLeftConfigNotify((self.changeLeftNotify, self.changeTopNotify),
+                                      tuple(map(str, self.model.colorCaptureNotify.topLeft)))
+        self.view.BotRightConfigNotify((self.changeRightNotify, self.changeBottomNotify),
+                                       tuple(map(str, self.model.colorCaptureNotify.botRight)))
+
+        self.view.SelectRegionButtonNotify(self.getRegionNotify)
 
         self.view.timeEatIntervalSection(self.setTimeEatInterval, str(self.model.timeEatInterval))
 
         self.view.resetDurationSection(self.setResetDuration, str(self.model.resetDuration))
-
-        self.view.captureColorButton(
-            self.setRGB
-        )
 
         self.view.brewSection(self.toggleBrew, self.setBrewEatInterval, str(self.model.brewEatInterval))
         self.initRun()
@@ -87,6 +109,199 @@ class controller:
 
         self.view.RunButton(toggle)
 
+    def changeToleranceNotify(self, tolerance: str):
+
+        try:
+
+            tolerance = int(tolerance)
+            with open('data/config.json', 'r') as f:
+                data = json.load(f)
+
+            data['ColorCaptureSettings1']['tolerance'] = tolerance
+
+            with open('data/config.json', 'w') as f:
+                json.dump(data, f, indent=4)
+
+            self.model.colorCaptureNotify.setTolerance(tolerance)
+
+        except Exception as e:
+            self.view.invalidIntPrompt(tolerance)
+            print(e)
+
+    def setRGBNotify(self):
+
+        try:
+            color = getColorAtMouseModel().capture()
+
+            with open('data/config.json', 'r') as f:
+                data = json.load(f)
+
+            data['FisherModelSettings']['colorNotify'] = color
+
+            with open('data/config.json', 'w') as f:
+                json.dump(data, f, indent=4)
+
+            self.model.setColorNotify(color)
+            self.view.changeRTextBoxNotify(str(color[0]))
+            self.view.changeGTextBoxNotify(str(color[1]))
+            self.view.changeBTextBoxNotify(str(color[2]))
+
+        #ADD AN ACTUAL HANDLER TO THIS
+        except Exception as e:
+            print(e)
+
+    def changeRColorNotify(self, color: str):
+
+        try:
+            RCol = int(color)
+            with open('data/config.json', 'r') as f:
+                data = json.load(f)
+
+            data['FisherModelSettings']['colorNotify'][0] = RCol
+            with open('data/config.json', 'w') as f:
+                json.dump(data, f, indent=4)
+
+            colorR = RCol
+            colorG = data['FisherModelSettings']['colorNotify'][1]
+            colorB = data['FisherModelSettings']['colorNotify'][2]
+
+            self.model.setColorNotify((colorR, colorG, colorB))
+
+        except:
+            self.view.invalidColorPrompt(color)
+
+    def changeGColorNotify(self, color: str):
+
+        try:
+            GCol = int(color)
+            with open('data/config.json', 'r') as f:
+                data = json.load(f)
+
+            data['FisherModelSettings']['colorNotify'][1] = GCol
+            with open('data/config.json', 'w') as f:
+                json.dump(data, f, indent=4)
+
+            colorR = data['FisherModelSettings']['colorNotify'][0]
+            colorG = GCol
+            colorB = data['FisherModelSettings']['colorNotify'][2]
+
+            self.model.setColorNotify((colorR, colorG, colorB))
+
+        except:
+            self.view.invalidColorPrompt(color)
+
+    def changeBColorNotify(self, color: str):
+
+        try:
+            BCol = int(color)
+            with open('data/config.json', 'r') as f:
+                data = json.load(f)
+
+            data['FisherModelSettings']['colorNotify'][2] = BCol
+            with open('data/config.json', 'w') as f:
+                json.dump(data, f, indent=4)
+
+            colorR = data['FisherModelSettings']['colorNotify'][0]
+            colorG = data['FisherModelSettings']['colorNotify'][1]
+            colorB = BCol
+
+            self.model.setColorNotify((colorR, colorG, colorB))
+
+        except:
+            self.view.invalidColorPrompt(color)
+
+    def getRegionNotify(self):
+
+        try:
+            topLeft, botRight = mouseScreenCaptureModel().capture()
+
+            with open('data/config.json', 'r') as f:
+                data = json.load(f)
+
+            data['ColorCaptureSettings1']['topLeft'] = topLeft
+            data['ColorCaptureSettings1']['bottomRight'] = botRight
+
+            with open('data/config.json', 'w') as f:
+                json.dump(data, f, indent=4)
+
+            self.model.colorCaptureNotify.setTopLeft(topLeft)
+            self.model.colorCaptureNotify.setBotRight(botRight)
+
+            self.view.changeLeftTextNotify(str(topLeft[0]))
+            self.view.changeTopTextNotify(str(topLeft[1]))
+            self.view.changeRightTextNotify(str(botRight[0]))
+            self.view.changeBottomTextNotify(str(botRight[1]))
+
+        except:
+            pass
+
+    def changeBottomNotify(self, y: str):
+
+        try:
+            y = int(y)
+            with open('data/config.json', 'r') as f:
+                data = json.load(f)
+
+            data['ColorCaptureSettings1']['bottomRight'][1] = y
+
+            with open('data/config.json', 'w') as f:
+                json.dump(data, f, indent=4)
+
+            self.model.colorCaptureNotify.setBotRight(tuple(data['ColorCaptureSettings1']['bottomRight']))
+
+        except Exception as e:
+            self.view.invalidIntPrompt(y)
+
+    def changeRightNotify(self, x: str):
+
+        try:
+            x = int(x)
+            with open('data/config.json', 'r') as f:
+                data = json.load(f)
+
+            data['ColorCaptureSettings1']['bottomRight'][0] = x
+
+            with open('data/config.json', 'w') as f:
+                json.dump(data, f, indent=4)
+
+            self.model.colorCaptureNotify.setBotRight(tuple(data['ColorCaptureSettings1']['bottomRight']))
+
+        except Exception as e:
+            self.view.invalidIntPrompt(x)
+
+    def changeTopNotify(self, y: str):
+
+        try:
+            y = int(y)
+            with open('data/config.json', 'r') as f:
+                data = json.load(f)
+
+            data['ColorCaptureSettings1']['topLeft'][1] = y
+
+            with open('data/config.json', 'w') as f:
+                json.dump(data, f, indent=4)
+
+            self.model.colorCaptureNotify.setTopLeft(tuple(data['ColorCaptureSettings1']['topLeft']))
+
+        except Exception as e:
+            self.view.invalidIntPrompt(y)
+
+    def changeLeftNotify(self, x: str):
+
+        try:
+            x = int(x)
+            with open('data/config.json', 'r') as f:
+                data = json.load(f)
+
+            data['ColorCaptureSettings1']['topLeft'][0] = x
+
+            with open('data/config.json', 'w') as f:
+                json.dump(data, f, indent=4)
+
+            self.model.colorCaptureNotify.setTopLeft(tuple(data['ColorCaptureSettings1']['topLeft']))
+
+        except Exception as e:
+            self.view.invalidIntPrompt(x)
 
     def toggleBrew(self, checked: bool):
         self.model.setBrewEat(checked)
@@ -162,7 +377,7 @@ class controller:
             data['FisherModelSettings']['color'] = color
 
             with open('data/config.json', 'w') as f:
-                json.dump(data, f)
+                json.dump(data, f, indent=4)
 
             self.model.setColor(color)
             self.view.changeRTextBox(str(color[0]))
@@ -229,7 +444,7 @@ class controller:
             with open('data/config.json', 'w') as f:
                 json.dump(data, f, indent=4)
 
-            self.model.colorCapture.setTopLeft(tuple(data['ColorCaptureSettings']['bottomRight']))
+            self.model.colorCapture.setBotRight(tuple(data['ColorCaptureSettings']['bottomRight']))
 
         except Exception as e:
             self.view.invalidIntPrompt(y)
@@ -246,7 +461,7 @@ class controller:
             with open('data/config.json', 'w') as f:
                 json.dump(data, f, indent=4)
 
-            self.model.colorCapture.setTopLeft(tuple(data['ColorCaptureSettings']['bottomRight']))
+            self.model.colorCapture.setBotRight(tuple(data['ColorCaptureSettings']['bottomRight']))
 
         except Exception as e:
             self.view.invalidIntPrompt(x)

@@ -5,12 +5,19 @@
     "tolerance": 10
   },
 
+  "ColorCaptureSettings1": {
+    "topLeft": [250, 250],
+    "bottomRight": [600, 600],
+    "tolerance": 30
+  },
+
   "FisherModelSettings": {
     "color": [255, 255, 255],
+    "colorNotify": [0, 0, 0],
     "scan_delay": 0.75,
     "click_delay": 0.25,
     "post_fish_delay": 1,
-    "clicks": 25,
+    "clicks": 100,
     "time_eat_interval": 1200,
     "reset_duration": 60,
     "brew_eat_interval": 190

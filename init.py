@@ -22,17 +22,26 @@ def init_models():
         with open('data/config.json', 'r') as f:
             data = json.load(f)
 
-        captureSettings = data['ColorCaptureSettings']
-        CaptureModel = colorCaptureModel(
-            captureSettings['topLeft'],
-            captureSettings['bottomRight'],
-            captureSettings['tolerance']
+        captureSettingsPrompt = data['ColorCaptureSettings']
+        CaptureModelPrompt = colorCaptureModel(
+            captureSettingsPrompt['topLeft'],
+            captureSettingsPrompt['bottomRight'],
+            captureSettingsPrompt['tolerance']
+        )
+
+        captureSettingsNotify = data['ColorCaptureSettings1']
+        captureModelNotify = colorCaptureModel(
+            captureSettingsNotify['topLeft'],
+            captureSettingsNotify['bottomRight'],
+            captureSettingsNotify['tolerance']
         )
 
         fishModelSettings = data['FisherModelSettings']
         fishingModel = model(
-            CaptureModel,
-            fishModelSettings['color'],
+            capturePrompt=CaptureModelPrompt,
+            captureNotify=captureModelNotify,
+            colorPrompt=fishModelSettings['color'],
+            colorNotify=fishModelSettings['colorNotify'],
             scanDelay= fishModelSettings['scan_delay'],
             clickDelay= fishModelSettings['click_delay'],
             postFishDelay= fishModelSettings['post_fish_delay'],

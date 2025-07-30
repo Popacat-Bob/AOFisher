@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QLineEdit, QHBoxLayout, QWidget, QMessageBox, QVBoxLayout, QSizePolicy
+from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QLineEdit, QHBoxLayout, QWidget, QMessageBox, QVBoxLayout, \
+    QSizePolicy, QTabWidget
 from PyQt5.QtGui import QIcon, QFont, QGuiApplication
 from typing import Callable
 from pynput import keyboard
@@ -16,38 +17,156 @@ class view(QMainWindow):
         self._sizeWidth = sizeWidth
         self._sizeHeight = sizeHeight
         
-        self._leftLayout = QVBoxLayout()
-        self._leftLayout.setSpacing(0)
-        self._leftLayout.setContentsMargins(0, 0, 0, 0)
-        self._leftWidget = QWidget()
-        self._leftWidget.setLayout(self._leftLayout)
+        self._fishingLayout = QVBoxLayout()
+        self._fishingLayout.setSpacing(0)
+        self._fishingLayout.setContentsMargins(0, 0, 0, 0)
+        self._fishingWidget = QWidget()
+        self._fishingWidget.setLayout(self._fishingLayout)
 
-        self._rightLayout = QVBoxLayout()
-        self._rightLayout.setSpacing(0)
-        self._rightLayout.setContentsMargins(0, 0, 0, 0)
-        self._rightWidget = QWidget()
-        self._rightWidget.setLayout(self._rightLayout)
+        self._regionLayout = QVBoxLayout()
+        self._regionLayout.setSpacing(0)
+        self._regionLayout.setContentsMargins(0, 0, 0, 0)
+        self._regionWidget = QWidget()
+        self._regionWidget.setLayout(self._regionLayout)
 
-        self._configLayout = QHBoxLayout()
-        self._configLayout.addWidget(self._leftWidget)
-        self._configLayout.addWidget(self._rightWidget)
+        self._miscLayout = QVBoxLayout()
+        self._miscLayout.setSpacing(0)
+        self._miscLayout.setContentsMargins(0, 0, 0, 0)
+        self._miscWidget = QWidget()
+        self._miscWidget.setLayout(self._miscLayout)
 
-        self._configWidget = QWidget()
-        self._configWidget.setLayout(self._configLayout)
+        tabs = QTabWidget()
+        tabs.addTab(self._fishingWidget, "Fishing")
+        tabs.addTab(self._miscWidget, "Misc")
+        tabs.addTab(self._regionWidget, "Region")
 
-        self._mainLayout = QVBoxLayout()
-        self._mainLayout.addWidget(self._configWidget)
+        layout = QHBoxLayout()
+        layout.addWidget(tabs)
 
-        self._widget = QWidget()
-        self._widget.setLayout(self._mainLayout)
-        self.setCentralWidget(self._widget)
+        centralWidget = QWidget()
+        self.setCentralWidget(centralWidget)
+
+        centralWidget.setLayout(layout)
+
+    def ToleranceSettingNotify(self, func: Callable, current: str):
+
+        ToleranceLayout = QHBoxLayout()
+        ToleranceLabel = QLabel("Tolerance")
+        ToleranceTextBox = QLineEdit(current)
+
+        ToleranceTextBox.returnPressed.connect(lambda: func(ToleranceTextBox.text()))
+
+        ToleranceLayout.addWidget(ToleranceLabel)
+        ToleranceLayout.addWidget(ToleranceTextBox)
+
+        ToleranceWidget = QWidget()
+        ToleranceWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        ToleranceWidget.setLayout(ToleranceLayout)
+        self._RGBLayoutNotify.addWidget(ToleranceWidget)
+
+    def RGBSectionNotify(self, funcs: tuple[Callable[[str], None], ...], currents: tuple[str, ...]):
+
+        self._RGBLayoutNotify = QHBoxLayout()
+        RGBLabel = QLabel("RGB (Notify)", self)
+
+        self._RTextBoxNotify = QLineEdit(currents[0])
+        self._RTextBoxNotify.returnPressed.connect(lambda: funcs[0](self._RTextBoxNotify.text()))
+
+        self._GTextBoxNotify= QLineEdit(currents[1])
+        self._GTextBoxNotify.returnPressed.connect(lambda: funcs[1](self._GTextBoxNotify.text()))
+
+        self._BTextBoxNotify= QLineEdit(currents[2])
+        self._BTextBoxNotify.returnPressed.connect(lambda: funcs[2](self._BTextBoxNotify.text()))
+
+        self._RGBLayoutNotify.addWidget(RGBLabel)
+        self._RGBLayoutNotify.addWidget(self._RTextBoxNotify)
+        self._RGBLayoutNotify.addWidget(self._GTextBoxNotify)
+        self._RGBLayoutNotify.addWidget(self._BTextBoxNotify)
+
+        rgbWidget = QWidget()
+        rgbWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        rgbWidget.setLayout(self._RGBLayoutNotify)
+        self._fishingLayout.addWidget(rgbWidget)
+
+    def captureColorButtonNotify(self, func: Callable):
+
+        CaptureColorButton = QPushButton("Capture Color")
+        CaptureColorButton.clicked.connect(func)
+
+        self._RGBLayoutNotify.addWidget(CaptureColorButton)
+
+    def changeRTextBoxNotify(self, new: str):
+        self._RTextBoxNotify.setText(new)
+
+    def changeGTextBoxNotify(self, new: str):
+        self._GTextBoxNotify.setText(new)
+
+    def changeBTextBoxNotify(self, new: str):
+        self._BTextBoxNotify.setText(new)
+
+    def TopLeftConfigNotify(self, funcs: tuple[Callable[[str], None], ...], currents: tuple[str, ...]):
+
+        TopfishingLayout = QHBoxLayout()
+
+        TopleftLabel = QLabel("Top Left")
+        self._LeftTextBoxNotify = QLineEdit(currents[0])
+        self._TopTextBoxNotify = QLineEdit(currents[1])
+
+        self._LeftTextBoxNotify.returnPressed.connect(lambda: funcs[0](self._LeftTextBoxNotify.text()))
+        self._TopTextBoxNotify.returnPressed.connect(lambda: funcs[1](self._TopTextBoxNotify.text()))
+
+        TopfishingLayout.addWidget(TopleftLabel)
+        TopfishingLayout.addWidget(self._LeftTextBoxNotify)
+        TopfishingLayout.addWidget(self._TopTextBoxNotify)
+
+        TopleftWidget = QWidget()
+        TopleftWidget.setLayout(TopfishingLayout)
+        TopleftWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        self._regionLayout.addWidget(TopleftWidget)
+
+    def changeLeftTextNotify(self, text: str):
+        self._LeftTextBoxNotify.setText(text)
+
+    def changeTopTextNotify(self, text: str):
+        self._TopTextBoxNotify.setText(text)
+
+    def BotRightConfigNotify(self, funcs: tuple[Callable[[str], None], ...], currents: tuple[str, ...]):
+
+        BotmiscLayout = QHBoxLayout()
+
+        BotrightLabel = QLabel("Bottom Right")
+        self._RightTextBoxNotify = QLineEdit(currents[0])
+        self._BottomTextBoxNotify = QLineEdit(currents[1])
+
+        self._RightTextBoxNotify.returnPressed.connect(lambda: funcs[0](self._RightTextBoxNotify.text()))
+        self._BottomTextBoxNotify.returnPressed.connect(lambda: funcs[1](self._BottomTextBoxNotify.text()))
+
+        BotmiscLayout.addWidget(BotrightLabel)
+        BotmiscLayout.addWidget(self._RightTextBoxNotify)
+        BotmiscLayout.addWidget(self._BottomTextBoxNotify)
+
+        BotrightWidget = QWidget()
+        BotrightWidget.setLayout(BotmiscLayout)
+        BotrightWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        self._regionLayout.addWidget(BotrightWidget)
+
+    def changeRightTextNotify(self, text: str):
+        self._RightTextBoxNotify.setText(text)
+
+    def changeBotTextNotify(self, text: str):
+        self._BottomTextBoxNotify.setText(text)
+
+    def SelectRegionButtonNotify(self, func: Callable):
+
+        SelectRegionButton = QPushButton("Select rectangular region (Notify)")
+        SelectRegionButton.clicked.connect(func)
+
+        self._regionLayout.addWidget(SelectRegionButton)
 
     def brewSection(self, func: Callable, func_1: Callable[[str], None], current: str):
 
-        brewSectionLayout = QVBoxLayout()
+        brewSectionLayout = QHBoxLayout()
         brewSectionLabel = QLabel("Brew settings\n Place brew at slot 8")
-
-        brewSettingsLayout = QHBoxLayout()
 
         brewEatIntervalLine = QLineEdit(current)
         self._brewEatButton = QPushButton('Start eating brew (H)')
@@ -56,21 +175,15 @@ class view(QMainWindow):
         brewEatIntervalLine.returnPressed.connect(lambda: func_1(brewEatIntervalLine.text()))
         self._brewEatButton.toggled.connect(func)
 
-        brewSettingsLayout.addWidget(brewEatIntervalLine)
-        brewSettingsLayout.addWidget(self._brewEatButton)
-
-        brewSettingsWidget = QWidget()
-        brewSettingsWidget.setLayout(brewSettingsLayout)
-        brewSettingsWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-
-        brewSectionLayout.addWidget(brewSettingsWidget)
         brewSectionLayout.addWidget(brewSectionLabel)
+        brewSectionLayout.addWidget(brewEatIntervalLine)
+        brewSectionLayout.addWidget(self._brewEatButton)
 
         brewSectionWidget = QWidget()
         brewSectionWidget.setLayout(brewSectionLayout)
         brewSectionWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
 
-        self._leftLayout.addWidget(brewSectionWidget)
+        self._miscLayout.addWidget(brewSectionWidget)
 
     def onBrewButton(self):
         self._brewEatButton.setText("Stop eating brew (H)")
@@ -94,14 +207,14 @@ class view(QMainWindow):
         timeEatIntervalWidget = QWidget()
         timeEatIntervalWidget.setLayout(timeEatIntervalLayout)
         timeEatIntervalWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-        self._rightLayout.addWidget(timeEatIntervalWidget)
+        self._miscLayout.addWidget(timeEatIntervalWidget)
 
     def captureColorButton(self, func: Callable):
 
         CaptureColorButton = QPushButton("Capture Color")
         CaptureColorButton.clicked.connect(func)
 
-        self._leftLayout.addWidget(CaptureColorButton)
+        self._RGBLayout.addWidget(CaptureColorButton)
 
     def keyRunTrigger(self):
 
@@ -133,15 +246,15 @@ class view(QMainWindow):
 
         self._RunButton.toggled.connect(func)
 
-        self._mainLayout.addWidget(self._RunButton)
+        self._fishingLayout.addWidget(self._RunButton)
 
 
-    def SelectRegionButton(self, func: Callable):
+    def SelectRegionButtonPrompt(self, func: Callable):
         
-        SelectRegionButton = QPushButton("Select rectangular region")
+        SelectRegionButton = QPushButton("Select rectangular region (Prompt)")
         SelectRegionButton.clicked.connect(func)
         
-        self._rightLayout.addWidget(SelectRegionButton)
+        self._regionLayout.addWidget(SelectRegionButton)
         
     def ToleranceSetting(self, func: Callable, current: str):
         
@@ -157,7 +270,7 @@ class view(QMainWindow):
         ToleranceWidget = QWidget()
         ToleranceWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         ToleranceWidget.setLayout(ToleranceLayout)
-        self._rightLayout.addWidget(ToleranceWidget)
+        self._RGBLayout.addWidget(ToleranceWidget)
 
     def ClicksNumberSection(self, func: Callable, current: str):
 
@@ -172,11 +285,11 @@ class view(QMainWindow):
         ClicksWidget = QWidget()
         ClicksWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         ClicksWidget.setLayout(ClicksLayout)
-        self._leftLayout.addWidget(ClicksWidget)
+        self._fishingLayout.addWidget(ClicksWidget)
 
     def BotRightConfig(self, funcs: tuple[Callable[[str], None], ...], currents: tuple[str, ...]):
 
-        BotrightLayout = QHBoxLayout()
+        BotmiscLayout = QHBoxLayout()
 
         BotrightLabel = QLabel("Bottom Right")
         self._RightTextBox = QLineEdit(currents[0])
@@ -185,14 +298,14 @@ class view(QMainWindow):
         self._RightTextBox.returnPressed.connect(lambda: funcs[0](self._RightTextBox.text()))
         self._BottomTextBox.returnPressed.connect(lambda: funcs[1](self._BottomTextBox.text()))
         
-        BotrightLayout.addWidget(BotrightLabel)
-        BotrightLayout.addWidget(self._RightTextBox)
-        BotrightLayout.addWidget(self._BottomTextBox)
+        BotmiscLayout.addWidget(BotrightLabel)
+        BotmiscLayout.addWidget(self._RightTextBox)
+        BotmiscLayout.addWidget(self._BottomTextBox)
 
         BotrightWidget = QWidget()
-        BotrightWidget.setLayout(BotrightLayout)
+        BotrightWidget.setLayout(BotmiscLayout)
         BotrightWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-        self._rightLayout.addWidget(BotrightWidget)
+        self._regionLayout.addWidget(BotrightWidget)
 
     def changeBottomTextDisplay(self, new: str):
         self._BottomTextBox.setText(new)
@@ -202,7 +315,7 @@ class view(QMainWindow):
 
     def TopLeftConfig(self, funcs: tuple[Callable[[str], None], ...], currents: tuple[str, ...]):
 
-        TopleftLayout = QHBoxLayout()
+        TopfishingLayout = QHBoxLayout()
 
         TopleftLabel = QLabel("Top Left")
         self._LeftTextBox = QLineEdit(currents[0])
@@ -211,14 +324,14 @@ class view(QMainWindow):
         self._LeftTextBox.returnPressed.connect(lambda: funcs[0](self._LeftTextBox.text()))
         self._TopTextBox.returnPressed.connect(lambda: funcs[1](self._TopTextBox.text()))
 
-        TopleftLayout.addWidget(TopleftLabel)
-        TopleftLayout.addWidget(self._LeftTextBox)
-        TopleftLayout.addWidget(self._TopTextBox)
+        TopfishingLayout.addWidget(TopleftLabel)
+        TopfishingLayout.addWidget(self._LeftTextBox)
+        TopfishingLayout.addWidget(self._TopTextBox)
 
         TopleftWidget = QWidget()
-        TopleftWidget.setLayout(TopleftLayout)
+        TopleftWidget.setLayout(TopfishingLayout)
         TopleftWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-        self._rightLayout.addWidget(TopleftWidget)
+        self._regionLayout.addWidget(TopleftWidget)
 
     def changeTopTextDisplay(self, new: str):
         self._TopTextBox.setText(new)
@@ -240,7 +353,7 @@ class view(QMainWindow):
         FishWidget = QWidget()
         FishWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         FishWidget.setLayout(FishLayout)
-        self._leftLayout.addWidget(FishWidget)
+        self._fishingLayout.addWidget(FishWidget)
 
     def ClickConfigSection(self, func: Callable, current: str):
         ClickLayout = QHBoxLayout()
@@ -254,7 +367,7 @@ class view(QMainWindow):
         ClickWidget = QWidget()
         ClickWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         ClickWidget.setLayout(ClickLayout)
-        self._leftLayout.addWidget(ClickWidget)
+        self._fishingLayout.addWidget(ClickWidget)
 
     def ScanConfigSection(self, func: Callable, current: str): 
 
@@ -269,7 +382,7 @@ class view(QMainWindow):
         ScanWidget = QWidget()
         ScanWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         ScanWidget.setLayout(ScanLayout)
-        self._leftLayout.addWidget(ScanWidget)
+        self._fishingLayout.addWidget(ScanWidget)
         
     def resetDurationSection(self, func: Callable, current: str):
 
@@ -286,13 +399,13 @@ class view(QMainWindow):
         resetDurationWidget = QWidget()
         resetDurationWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
         resetDurationWidget.setLayout(resetDurationLayout)
-        self._leftLayout.addWidget(resetDurationWidget)
+        self._fishingLayout.addWidget(resetDurationWidget)
 
 
     def RGBSection(self, funcs: tuple[Callable[[str], None], ...], currents: tuple[str, ...]):
         
-        RGBLayout = QHBoxLayout()
-        RGBLabel = QLabel("RGB", self)
+        self._RGBLayout = QHBoxLayout()
+        RGBLabel = QLabel("RGB (Prompt)", self)
 
         self._RTextBox = QLineEdit(currents[0])
         self._RTextBox.returnPressed.connect(lambda: funcs[0](self._RTextBox.text()))
@@ -303,15 +416,15 @@ class view(QMainWindow):
         self._BTextBox = QLineEdit(currents[2])
         self._BTextBox.returnPressed.connect(lambda: funcs[2](self._BTextBox.text()))
 
-        RGBLayout.addWidget(RGBLabel)
-        RGBLayout.addWidget(self._RTextBox)
-        RGBLayout.addWidget(self._GTextBox)
-        RGBLayout.addWidget(self._BTextBox)
+        self._RGBLayout.addWidget(RGBLabel)
+        self._RGBLayout.addWidget(self._RTextBox)
+        self._RGBLayout.addWidget(self._GTextBox)
+        self._RGBLayout.addWidget(self._BTextBox)
 
         rgbWidget = QWidget()
         rgbWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-        rgbWidget.setLayout(RGBLayout)
-        self._leftLayout.addWidget(rgbWidget)
+        rgbWidget.setLayout(self._RGBLayout)
+        self._fishingLayout.addWidget(rgbWidget)
 
     def changeRTextBox(self, new: str):
         self._RTextBox.setText(new)

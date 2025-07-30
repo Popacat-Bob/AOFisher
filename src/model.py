@@ -60,8 +60,10 @@ class colorCaptureModel:
 class model:
 
     def __init__(self,
-                 capture: colorCaptureModel,
-                 color: tuple[int, int, int],
+                 capturePrompt: colorCaptureModel,
+                 captureNotify: colorCaptureModel,
+                 colorPrompt: tuple[int, int, int],
+                 colorNotify: tuple[int, int, int],
                  scanDelay: float = 1,
                  clickDelay: float = 0.5,
                  postFishDelay: float = 5,
@@ -74,8 +76,12 @@ class model:
         self._scanDelay = scanDelay
         self._postFishDelay = postFishDelay
 
-        self._color = color
-        self._capturer = capture
+        self._colorPrompt = colorPrompt
+        self._colorNotify = colorNotify
+
+        self._capturerPrompt = capturePrompt
+        self._capturerNotify = captureNotify
+
         self._clickDelay = clickDelay
         self._clicks = clicks
 
@@ -110,7 +116,7 @@ class model:
     
     @property
     def color(self): 
-        return self._color
+        return self._colorPrompt
     
     @property 
     def scanDelay(self):
@@ -122,11 +128,19 @@ class model:
     
     @property
     def colorCapture(self):
-        return self._capturer
+        return self._capturerPrompt
+
+    @property
+    def colorCaptureNotify(self):
+        return self._capturerNotify
 
     @property
     def brewEatInterval(self):
         return self._brewEatInterval
+
+    @property
+    def colorNotify(self):
+        return self._colorNotify
 
     def setTimeEatInterval(self, timeEatInterval: int):
         self._timeEatInterval = timeEatInterval
@@ -135,7 +149,10 @@ class model:
         self._resetDuration = resetDuration
 
     def setColor(self, color: tuple[int, int, int]):
-        self._color = color
+        self._colorPrompt = color
+
+    def setColorNotify(self, colorNotify: tuple[int, int, int]):
+        self._colorNotify = colorNotify
 
     def setClickDelay(self, clickDelay: float):
         self._clickDelay = clickDelay
@@ -195,10 +212,10 @@ class model:
         click()
 
     def _reFishAction(self):
+        keyboard.press_and_release('9')
+        sleep(1)
         keyboard.press_and_release('0')
         sleep(0.5)
-        keyboard.press_and_release('0')
-        sleep(self._postFishDelay)
         click()
 
     def _placeBrew(self):
@@ -253,30 +270,39 @@ class model:
 
             if self._isGreaterthanDuration(self._timeFishStart, self._resetDuration):
                 self._resetAction()
-                self._timeFishStart = None
-                return
+                break
 
-            if self._capturer.capture(self._color):
+            if self._capturerPrompt.capture(self._colorPrompt):
                 print("Logged catch")
                 self._catch()
 
                 if not self._running:
-                    return
+                    break
 
+                sleep(self._postFishDelay)
                 self._reFishAction()
-                self._timeFishStart = None
-                return
+                print("Refished")
+                break
 
             sleep(self._scanDelay)
 
+        self._timeFishStart = None
+
+
     #catches fish based on clicks and click interval parameters
     def _catch(self):
-        for _ in range(self._clicks):
+        print('Catching')
+        clicks = 0
+        while not self._capturerNotify.capture(self._colorNotify):
 
-            if not self._running:
-                break
+            if clicks >= self._clicks:
+                return
 
             click()
+            clicks += 1
             sleep(self._clickDelay)
+
+        print('Stopped')
+
 
 
