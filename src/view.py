@@ -50,7 +50,7 @@ class view(QMainWindow):
         brewSettingsLayout = QHBoxLayout()
 
         brewEatIntervalLine = QLineEdit(current)
-        self._brewEatButton = QPushButton('Start')
+        self._brewEatButton = QPushButton('Start eating brew (H)')
         self._brewEatButton.setCheckable(True)
 
         brewEatIntervalLine.returnPressed.connect(lambda: func_1(brewEatIntervalLine.text()))
@@ -59,21 +59,25 @@ class view(QMainWindow):
         brewSettingsLayout.addWidget(brewEatIntervalLine)
         brewSettingsLayout.addWidget(self._brewEatButton)
 
-        brewSettingsWidget = QWidget().setLayout(brewSettingsLayout).setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        brewSettingsWidget = QWidget()
+        brewSettingsWidget.setLayout(brewSettingsLayout)
+        brewSettingsWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
 
         brewSectionLayout.addWidget(brewSettingsWidget)
         brewSectionLayout.addWidget(brewSectionLabel)
 
-        brewSectionWidget = QWidget().setLayout(brewSectionLayout).setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        brewSectionWidget = QWidget()
+        brewSectionWidget.setLayout(brewSectionLayout)
+        brewSectionWidget.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
 
         self._leftLayout.addWidget(brewSectionWidget)
 
     def onBrewButton(self):
-        self._brewEatButton.setText("Stop eating brew (K)")
+        self._brewEatButton.setText("Stop eating brew (H)")
         self._brewEatButton.setStyleSheet("background-color: green")
 
     def offBrewButton(self):
-        self._brewEatButton.setText("Start eating brew (K)")
+        self._brewEatButton.setText("Start eating brew (H)")
         self._brewEatButton.setStyleSheet("background-color: gray")
 
     def timeEatIntervalSection(self, func: Callable[[str], None], current: str):
@@ -106,7 +110,7 @@ class view(QMainWindow):
                 if key.char.lower() == 'y':
                     self._RunButton.toggle()
 
-                if key.char.lower() == 'k':
+                if key.char.lower() == 'h':
                     self._brewEatButton.toggle()
             except:
                 pass

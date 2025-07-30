@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from src.controller import controller
 from init import *
 

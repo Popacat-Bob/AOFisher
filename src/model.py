@@ -163,6 +163,13 @@ class model:
     def setBrewEat(self, checked: bool):
         self._brewEat = checked
 
+        if checked:
+            print("Brew running")
+
+        else:
+            print("Brew stopped")
+            self._brewsToEat = 0
+
     def _isGreaterthanDuration(self, start, duration):
         return True if time() - start >= duration else False
 
@@ -197,14 +204,21 @@ class model:
     def _placeBrew(self):
         print("Placing brew")
         keyboard.press_and_release('8')
-        sleep(0.5)
+        sleep(1)
+        click()
+        sleep(1)
+        keyboard.press_and_release('8')
+        sleep(1)
 
     def _brewAction(self):
         print("Eating brew")
         keyboard.press_and_release('e')
+        sleep(1)
+        keyboard.press_and_release('9')
         sleep(0.5)
         keyboard.press_and_release('0')
         sleep(0.5)
+        click()
 
     #connects all actions
     def run(self):
@@ -230,9 +244,7 @@ class model:
             if self._isGreaterthanDuration(self._brewEatStart, self._brewEatInterval):
                 self._brewAction()
                 self._brewsToEat-= 1
-                self._brewEatStart = None
-        else:
-            self._brewsToEat = 0
+                self._brewEatStart = time()
 
         while self._running:
 
