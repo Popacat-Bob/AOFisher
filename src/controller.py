@@ -240,7 +240,7 @@ class controller:
             self.model.colorCapture.setTopLeft(tuple(data['ColorCaptureSettings']['topLeft']))
 
         except Exception as e:
-            self.view.invalidIntPrompt(x)
+            self.view.invalidIntPrompt(y)
 
     def changeLeft(self, x: str):
         

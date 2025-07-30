@@ -86,6 +86,7 @@ class model:
         self._resetDuration = resetDuration
 
         self._brewEatInterval = brewEatInterval
+        self._brewsToEat = 0
         self._brewEatStart = None
         self._brewEat = False
 
@@ -152,17 +153,27 @@ class model:
         else:
             print("Stopped")
 
+    def setBrewEatInterval(self, brewEatInterval: int):
+        self._brewEatInterval = brewEatInterval
+
+    def flipBrewEat(self):
+        self._brewEat = not self._brewEat
+
+    def _isGreaterthanDuration(self, start, duration):
+        return True if time() - start >= duration else False
+
+    #actions for eating
     def _eatAction(self):
+        print("Logged eating")
         keyboard.press_and_release('9')
         sleep(0.5)
         click()
         sleep(2)
         keyboard.press_and_release('0')
         click()
-        print("Logged eating")
-        self._timeEatStart = time()
 
-    def _fishResetAction(self):
+    #actions for restting broken fishing
+    def _resetAction(self):
         print('Resetting sequence')
         click()
         sleep(0.5)
@@ -171,30 +182,62 @@ class model:
         keyboard.press_and_release('0')
         sleep(0.5)
         click()
-        self._timeFishStart = None
 
-    def _brewEatAction(self):
-        ...
+    def _reFishAction(self):
+        keyboard.press_and_release('0')
+        sleep(0.5)
+        keyboard.press_and_release('0')
+        sleep(self._postFishDelay)
+        click()
 
-    #runs the process for fishing, and checks
+    def _placeBrew(self):
+        print("Placing brew")
+        keyboard.press_and_release('8')
+        sleep(0.5)
+
+    def _brewAction(self):
+        print("Eating brew")
+        keyboard.press_and_release('e')
+        sleep(0.5)
+        keyboard.press_and_release('0')
+        sleep(0.5)
+
+    #connects all actions
     def run(self):
 
         if not self._timeEatStart:
             self._timeEatStart = time()
 
-        if time() - self._timeEatStart >= self._timeEatInterval:
+        if self._isGreaterthanDuration(self._timeEatStart, self._timeEatInterval):
             self._eatAction()
+            self._timeEatStart = time()
 
         if self._brewEat:
-            ...
+
+            if not self._brewsToEat:
+                self._placeBrew()
+                self._brewAction()
+                self._brewsToEat = 4
+                self._brewEatStart = None
+
+            if not self._brewEatStart:
+                self._brewEatStart = time()
+
+            if self._isGreaterthanDuration(self._brewEatStart, self._brewEatInterval):
+                self._brewAction()
+                self._brewsToEat-= 1
+                self._brewEatStart = None
+        else:
+            self._brewsToEat = 0
 
         while self._running:
 
             if not self._timeFishStart:
                 self._timeFishStart = time()
 
-            if time() -  self._timeFishStart >= self._resetDuration:
-                self._fishResetAction()
+            if self._isGreaterthanDuration(self._timeFishStart, self._resetDuration):
+                self._resetAction()
+                self._timeFishStart = None
                 return
 
             if self._capturer.capture(self._color):
@@ -204,11 +247,7 @@ class model:
                 if not self._running:
                     return
 
-                keyboard.press_and_release('0')
-                sleep(0.5)
-                keyboard.press_and_release('0')
-                sleep(self._postFishDelay)
-                click()
+                self._reFishAction()
                 self._timeFishStart = None
                 return
 

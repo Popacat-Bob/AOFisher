@@ -38,6 +38,7 @@ def init_models():
             postFishDelay= fishModelSettings['post_fish_delay'],
             clicks= fishModelSettings['clicks'],
             timeEatInterval= fishModelSettings['time_eat_interval'],
+            brewEatInterval= fishModelSettings['brew_eat_interval'],
             resetDuration= fishModelSettings['reset_duration'],
         )
 

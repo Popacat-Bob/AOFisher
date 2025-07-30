@@ -42,6 +42,39 @@ class view(QMainWindow):
         self._widget.setLayout(self._mainLayout)
         self.setCentralWidget(self._widget)
 
+    def brewSection(self, func: Callable, func_1: Callable[[str], None], current: str):
+
+        brewSectionLayout = QVBoxLayout()
+        brewSectionLabel = QLabel("Brew settings\n Place brew at slot 8")
+
+        brewSettingsLayout = QHBoxLayout()
+
+        brewEatIntervalLine = QLineEdit(current)
+        self._brewEatButton = QPushButton('Start')
+        self._brewEatButton.setCheckable(True)
+
+        brewEatIntervalLine.returnPressed.connect(lambda: func_1(brewEatIntervalLine.text()))
+        self._brewEatButton.toggled.connect(func)
+
+        brewSettingsLayout.addWidget(brewEatIntervalLine)
+        brewSettingsLayout.addWidget(self._brewEatButton)
+
+        brewSettingsWidget = QWidget().setLayout(brewSettingsLayout).setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+
+        brewSectionLayout.addWidget(brewSettingsWidget)
+        brewSectionLayout.addWidget(brewSectionLabel)
+
+        brewSectionWidget = QWidget().setLayout(brewSectionLayout).setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+
+        self._leftLayout.addWidget(brewSectionWidget)
+
+    def onBrewButton(self):
+        self._brewEatButton.setText("Stop eating brew (K)")
+        self._brewEatButton.setStyleSheet("background-color: green")
+
+    def offBrewButton(self):
+        self._brewEatButton.setText("Start eating brew (K)")
+        self._brewEatButton.setStyleSheet("background-color: gray")
 
     def timeEatIntervalSection(self, func: Callable[[str], None], current: str):
 
@@ -72,6 +105,9 @@ class view(QMainWindow):
             try:
                 if key.char.lower() == 'y':
                     self._RunButton.toggle()
+
+                if key.char.lower() == 'k':
+                    self._brewEatButton.toggle()
             except:
                 pass
 

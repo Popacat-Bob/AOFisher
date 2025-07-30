@@ -12,7 +12,8 @@
     "post_fish_delay": 1,
     "clicks": 25,
     "time_eat_interval": 1200,
-    "reset_duration": 60
+    "reset_duration": 60,
+    "brew_eat_interval": 190
   },
 
   "App": {
