@@ -25,7 +25,6 @@ class MouseDrawRectEvent:
         if self.is_done is None: return 
         self.rect.update_rect(self.x0, self.y0, x, y)
 
-
     def on_click(self, x, y, button, pressed):
         if button == mouse.Button.left and pressed:
             print(f'Coordinate start at x0={x}, y0={y}')
@@ -41,7 +40,6 @@ class MouseDrawRectEvent:
             self.is_done = True 
             self._invoke(self.rect, "hide")
             self._invoke(self.ss_overlay, "hide")
-            self._invoke(self.app, "quit")
             self.stop()
 
     def start(self):
@@ -57,4 +55,3 @@ class MouseDrawRectEvent:
     
     def stop(self):
         self.listener.stop()
-

@@ -19,6 +19,12 @@ class FishEventLoop:
         self.clicks = clicks
         self.color = np.array([color.b, color.g, color.r])
         self.is_fishing = False
+    
+    def set_rect(self, region: Rect):
+        self.fish_region = region 
+
+    def set_is_fishing(self, status: bool):
+        self.is_fishing = status 
 
     def detect_color(self, color: np.ndarray, region: Rect, tol: int) -> bool:
         with mss.MSS() as sc:  
